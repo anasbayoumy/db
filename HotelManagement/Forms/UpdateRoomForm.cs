@@ -7,7 +7,8 @@ namespace HotelManagement.Forms
 {
     public class UpdateRoomForm : Form
     {
-        private readonly int roomId;
+        private readonly int roomNum;
+        private readonly int hotelId;
         private ComboBox hotelComboBox;
         private TextBox roomNumTextBox;
         private ComboBox categoryComboBox;
@@ -16,11 +17,12 @@ namespace HotelManagement.Forms
         private Button saveButton;
         private Button cancelButton;
 
-        public UpdateRoomForm(int roomId)
+        public UpdateRoomForm(int roomNum, int hotelId)
         {
-            this.roomId = roomId;
+            this.roomNum = roomNum;
+            this.hotelId = hotelId;
             InitializeUI();
-            LoadHotels();
+            //LoadHotels();
             LoadRoomData();
         }
 
@@ -34,7 +36,7 @@ namespace HotelManagement.Forms
             this.MinimizeBox = false;
 
             // Create labels and controls
-            Label hotelLabel = new Label { Text = "Hotel:", Location = new System.Drawing.Point(20, 20) };
+           /* Label hotelLabel = new Label { Text = "Hotel:", Location = new System.Drawing.Point(20, 20) };
             hotelComboBox = new ComboBox 
             { 
                 Location = new System.Drawing.Point(120, 20), 
@@ -43,7 +45,7 @@ namespace HotelManagement.Forms
             };
 
             Label roomNumLabel = new Label { Text = "Room Number:", Location = new System.Drawing.Point(20, 60) };
-            roomNumTextBox = new TextBox { Location = new System.Drawing.Point(120, 60), Size = new System.Drawing.Size(240, 20) };
+            roomNumTextBox = new TextBox { Location = new System.Drawing.Point(120, 60), Size = new System.Drawing.Size(240, 20) };*/
 
             Label categoryLabel = new Label { Text = "Category:", Location = new System.Drawing.Point(20, 100) };
             categoryComboBox = new ComboBox 
@@ -54,8 +56,8 @@ namespace HotelManagement.Forms
             };
             categoryComboBox.Items.AddRange(new string[] { "Standard", "Deluxe", "Suite", "Executive" });
 
-            Label rentLabel = new Label { Text = "Rent:", Location = new System.Drawing.Point(20, 140) };
-            rentTextBox = new TextBox { Location = new System.Drawing.Point(120, 140), Size = new System.Drawing.Size(240, 20) };
+            /*Label rentLabel = new Label { Text = "Rent:", Location = new System.Drawing.Point(20, 140) };
+            rentTextBox = new TextBox { Location = new System.Drawing.Point(120, 140), Size = new System.Drawing.Size(240, 20) };*/
 
             Label statusLabel = new Label { Text = "Status:", Location = new System.Drawing.Point(20, 180) };
             statusComboBox = new ComboBox 
@@ -84,16 +86,13 @@ namespace HotelManagement.Forms
 
             // Add controls to form
             this.Controls.AddRange(new Control[] {
-                hotelLabel, hotelComboBox,
-                roomNumLabel, roomNumTextBox,
                 categoryLabel, categoryComboBox,
-                rentLabel, rentTextBox,
                 statusLabel, statusComboBox,
                 saveButton, cancelButton
             });
         }
 
-        private void LoadHotels()
+        /*private void LoadHotels()
         {
             try
             {
@@ -121,7 +120,7 @@ namespace HotelManagement.Forms
             {
                 MessageBox.Show($"Error loading hotels: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }*/
 
         private void LoadRoomData()
         {
@@ -131,15 +130,16 @@ namespace HotelManagement.Forms
                 {
                     if (connection != null)
                     {
-                        string query = "SELECT * FROM Room WHERE Room_ID = @Room_ID";
+                        string query = "SELECT * FROM Room WHERE Room_Num = @Room_Num and Hotel_ID = @Hotel_ID";
                         MySqlCommand command = new MySqlCommand(query, connection);
-                        command.Parameters.AddWithValue("@Room_ID", roomId);
+                        command.Parameters.AddWithValue("@Room_Num", roomNum);
+                        command.Parameters.AddWithValue("@Hotel_ID", hotelId);
 
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                int hotelId = reader.GetInt32("Hotel_ID");
+                               /* int hotelId = reader.GetInt32("Hotel_ID");
                                 foreach (ComboBoxItem item in hotelComboBox.Items)
                                 {
                                     if (item.Id == hotelId)
@@ -147,11 +147,11 @@ namespace HotelManagement.Forms
                                         hotelComboBox.SelectedItem = item;
                                         break;
                                     }
-                                }
+                                }*/
 
-                                roomNumTextBox.Text = reader["Room_Num"].ToString();
+                                //roomNumTextBox.Text = reader["Room_Num"].ToString();
                                 categoryComboBox.SelectedItem = reader["Category"].ToString();
-                                rentTextBox.Text = reader["Rent"].ToString();
+                                //rentTextBox.Text = reader["Rent"].ToString();
                                 statusComboBox.SelectedItem = reader["Status"].ToString();
                             }
                         }
@@ -183,7 +183,7 @@ namespace HotelManagement.Forms
                             var selectedHotel = (ComboBoxItem)hotelComboBox.SelectedItem;
                             checkCommand.Parameters.AddWithValue("@Hotel_ID", selectedHotel.Id);
                             checkCommand.Parameters.AddWithValue("@Room_Num", roomNumTextBox.Text);
-                            checkCommand.Parameters.AddWithValue("@Room_ID", roomId);
+                            checkCommand.Parameters.AddWithValue("@Room_ID", roomNum);
                             int roomCount = Convert.ToInt32(checkCommand.ExecuteScalar());
 
                             if (roomCount > 0)
@@ -194,19 +194,17 @@ namespace HotelManagement.Forms
                             }
 
                             string query = @"UPDATE Room 
-                                           SET Hotel_ID = @Hotel_ID,
-                                               Room_Num = @Room_Num,
+                                           SET 
                                                Category = @Category,
-                                               Rent = @Rent,
                                                Status = @Status
-                                           WHERE Room_ID = @Room_ID";
+                                           WHERE Room_Num = @Room_Num and Hotel_ID = @Hotel_ID";
 
                             MySqlCommand command = new MySqlCommand(query, connection);
-                            command.Parameters.AddWithValue("@Room_ID", roomId);
+                            command.Parameters.AddWithValue("@Room_Num", roomNum);
                             command.Parameters.AddWithValue("@Hotel_ID", selectedHotel.Id);
-                            command.Parameters.AddWithValue("@Room_Num", roomNumTextBox.Text);
+                            //command.Parameters.AddWithValue("@Room_Num", roomNumTextBox.Text);
                             command.Parameters.AddWithValue("@Category", categoryComboBox.SelectedItem.ToString());
-                            command.Parameters.AddWithValue("@Rent", Convert.ToDecimal(rentTextBox.Text));
+                            //command.Parameters.AddWithValue("@Rent", Convert.ToDecimal(rentTextBox.Text));
                             command.Parameters.AddWithValue("@Status", statusComboBox.SelectedItem.ToString());
 
                             command.ExecuteNonQuery();

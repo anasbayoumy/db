@@ -144,10 +144,11 @@ namespace HotelManagement.Forms
                 {
                     if (connection != null)
                     {
-                        string query = @"SELECT r.Room_ID, r.Room_Num, h.Name as Hotel_Name, r.Category, 
-                                             r.Rent, r.Status
+                        string query = @"SELECT r.Room_Num, h.Name as Hotel_Name, r.Category, 
+                                             r.Status, c.Price, r.Hotel_ID
                                       FROM Room r
-                                      JOIN Hotel h ON r.Hotel_ID = h.Hotel_ID";
+                                      JOIN Hotel h ON r.Hotel_ID = h.Hotel_ID
+                                      JOIN Room_Category c ON r.Category = c.Category and r.Hotel_ID = c.Hotel_ID";
 
                         if (filterHotelComboBox.SelectedIndex > 0)
                         {
@@ -166,6 +167,7 @@ namespace HotelManagement.Forms
                         MySqlDataAdapter adapter = new MySqlDataAdapter(command);
                         DataTable dataTable = new DataTable();
                         adapter.Fill(dataTable);
+                        //dataTable.Columns[5].ColumnMapping = MappingType.Hidden;
                         roomGridView.DataSource = dataTable;
                     }
                 }
@@ -190,9 +192,10 @@ namespace HotelManagement.Forms
             if (roomGridView.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = roomGridView.SelectedRows[0];
-                int roomId = Convert.ToInt32(selectedRow.Cells["Room_ID"].Value);
-                
-                UpdateRoomForm updateForm = new UpdateRoomForm(roomId);
+                int roomNum = Convert.ToInt32(selectedRow.Cells["Room_Num"].Value);
+                int hotelId = Convert.ToInt32(selectedRow.Cells["Hotel_ID"].Value);
+
+                UpdateRoomForm updateForm = new UpdateRoomForm(roomNum,hotelId);
                 if (updateForm.ShowDialog() == DialogResult.OK)
                 {
                     LoadRoomData();
