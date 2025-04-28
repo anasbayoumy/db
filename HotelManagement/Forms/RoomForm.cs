@@ -167,8 +167,8 @@ namespace HotelManagement.Forms
                         MySqlDataAdapter adapter = new MySqlDataAdapter(command);
                         DataTable dataTable = new DataTable();
                         adapter.Fill(dataTable);
-                        //dataTable.Columns[5].ColumnMapping = MappingType.Hidden;
                         roomGridView.DataSource = dataTable;
+                        roomGridView.Columns["Hotel_ID"].Visible = false;
                     }
                 }
             }

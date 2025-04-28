@@ -51,13 +51,13 @@ namespace HotelManagement.Forms
             };
             categoryComboBox.Items.AddRange(new string[] { "Standard", "Deluxe", "Suite", "Executive" });
 
-            Label rentLabel = new Label { Text = "Rent:", Location = new System.Drawing.Point(20, 140) };
-            rentTextBox = new TextBox { Location = new System.Drawing.Point(120, 140), Size = new System.Drawing.Size(240, 20) };
+            /*Label rentLabel = new Label { Text = "Rent:", Location = new System.Drawing.Point(20, 140) };
+            rentTextBox = new TextBox { Location = new System.Drawing.Point(120, 140), Size = new System.Drawing.Size(240, 20) };*/
 
-            Label statusLabel = new Label { Text = "Status:", Location = new System.Drawing.Point(20, 180) };
+            Label statusLabel = new Label { Text = "Status:", Location = new System.Drawing.Point(20, 140) };
             statusComboBox = new ComboBox 
             { 
-                Location = new System.Drawing.Point(120, 180), 
+                Location = new System.Drawing.Point(120, 140), 
                 Size = new System.Drawing.Size(240, 20),
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
@@ -85,7 +85,6 @@ namespace HotelManagement.Forms
                 hotelLabel, hotelComboBox,
                 roomNumLabel, roomNumTextBox,
                 categoryLabel, categoryComboBox,
-                rentLabel, rentTextBox,
                 statusLabel, statusComboBox,
                 saveButton, cancelButton
             });
@@ -146,14 +145,14 @@ namespace HotelManagement.Forms
                                 return;
                             }
 
-                            string query = @"INSERT INTO Room (Hotel_ID, Room_Num, Category, Rent, Status)
-                                           VALUES (@Hotel_ID, @Room_Num, @Category, @Rent, @Status)";
+                            string query = @"INSERT INTO Room (Hotel_ID, Room_Num, Category, Status)
+                                           VALUES (@Hotel_ID, @Room_Num, @Category, @Status)";
 
                             MySqlCommand command = new MySqlCommand(query, connection);
                             command.Parameters.AddWithValue("@Hotel_ID", selectedHotel.Id);
                             command.Parameters.AddWithValue("@Room_Num", roomNumTextBox.Text);
                             command.Parameters.AddWithValue("@Category", categoryComboBox.SelectedItem.ToString());
-                            command.Parameters.AddWithValue("@Rent", Convert.ToDecimal(rentTextBox.Text));
+                            //command.Parameters.AddWithValue("@Rent", Convert.ToDecimal(rentTextBox.Text));
                             command.Parameters.AddWithValue("@Status", statusComboBox.SelectedItem.ToString());
 
                             command.ExecuteNonQuery();
@@ -188,11 +187,11 @@ namespace HotelManagement.Forms
                 return false;
             }
 
-            if (!decimal.TryParse(rentTextBox.Text, out decimal rent) || rent <= 0)
+            /*if (!decimal.TryParse(rentTextBox.Text, out decimal rent) || rent <= 0)
             {
                 MessageBox.Show("Please enter a valid rent amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
-            }
+            }*/
 
             return true;
         }
