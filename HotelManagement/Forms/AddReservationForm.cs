@@ -13,8 +13,8 @@ namespace HotelManagement.Forms
         public int GuestId { get; private set; }
         public int HotelId { get; private set; }
         public List<string> RoomNumbers { get; private set; }
-        public DateTime CheckInDate => checkInPicker.Value.Date;
-        public DateTime CheckOutDate => checkOutPicker.Value.Date;
+        public DateTime CheckInDate => checkInPicker.Value;
+        public DateTime CheckOutDate => checkOutPicker.Value;
 
         private ComboBox guestComboBox;
         private ComboBox hotelComboBox;
@@ -47,15 +47,17 @@ namespace HotelManagement.Forms
             roomsListBox = new CheckedListBox { Location = new Point(150, 100), Size = new Size(200, 120) };
 
             Label checkInLabel = new Label { Text = "Check-in Date:", Location = new Point(20, 240), Size = new Size(100, 20) };
-            checkInPicker = new DateTimePicker { Location = new Point(150, 240), Format = DateTimePickerFormat.Short };
+            checkInPicker = new DateTimePicker { Location = new Point(150, 240), Format = DateTimePickerFormat.Short, Value = DateTime.Today, MinDate = DateTime.Today };
 
             Label checkOutLabel = new Label { Text = "Check-out Date:", Location = new Point(20, 280), Size = new Size(100, 20) };
-            checkOutPicker = new DateTimePicker { Location = new Point(150, 280), Format = DateTimePickerFormat.Short };
+            checkOutPicker = new DateTimePicker { Location = new Point(150, 280), Format = DateTimePickerFormat.Short, Value = DateTime.Today.AddDays(1), MinDate = DateTime.Today.AddDays(1) };
 
             saveButton = new Button { Text = "Save", Location = new Point(50, 350) };
+            saveButton.Size = new Size(75, 50);
             saveButton.Click += SaveButton_Click;
 
             cancelButton = new Button { Text = "Cancel", Location = new Point(200, 350) };
+            cancelButton.Size = new Size(75, 50);
             cancelButton.Click += (s, e) => { DialogResult = DialogResult.Cancel; };
 
             Controls.Add(guestLabel);
@@ -85,8 +87,13 @@ namespace HotelManagement.Forms
                         MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
+                        dt.Columns.Add("DisplayText", typeof(string));
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            row["DisplayText"] = $"{row["Guest_ID"]} - {row["Name"]}";
+                        }
                         guestComboBox.DataSource = dt;
-                        guestComboBox.DisplayMember = "Name";
+                        guestComboBox.DisplayMember = "DisplayText";
                         guestComboBox.ValueMember = "Guest_ID";
                     }
                 }
@@ -107,7 +114,12 @@ namespace HotelManagement.Forms
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         hotelComboBox.DataSource = dt;
-                        hotelComboBox.DisplayMember = "Name";
+                        dt.Columns.Add("DisplayText", typeof(string));
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
+                        }
+                        hotelComboBox.DisplayMember = "DisplayText";
                         hotelComboBox.ValueMember = "Hotel_ID";
                     }
                 }

@@ -67,3 +67,6 @@ C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-wind
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.GuestForm.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.RoomForm.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.UpdateGuestForm.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.MainForm.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.ReservationServicesForm.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.AddRoomForm.resources

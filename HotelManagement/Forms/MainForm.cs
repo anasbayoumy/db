@@ -15,20 +15,20 @@ namespace HotelManagement.Forms
             this.Text = "Hotel Management System";
             this.Size = new System.Drawing.Size(800, 600);
 
-            // Create menu strip
+           /* // Create menu strip
             MenuStrip menuStrip = new MenuStrip();
             ToolStripMenuItem fileMenu = new ToolStripMenuItem("File");
             ToolStripMenuItem exitMenuItem = new ToolStripMenuItem("Exit");
             exitMenuItem.Click += (s, e) => Application.Exit();
             fileMenu.DropDownItems.Add(exitMenuItem);
-            menuStrip.Items.Add(fileMenu);
+            menuStrip.Items.Add(fileMenu);*/
 
             // Create buttons for different operations
             Button guestButton = new Button
             {
                 Text = "Manage Guests",
                 Location = new System.Drawing.Point(50, 50),
-                Size = new System.Drawing.Size(150, 40)
+                Size = new System.Drawing.Size(300, 40)
             };
             guestButton.Click += GuestButton_Click;
 
@@ -36,7 +36,7 @@ namespace HotelManagement.Forms
             {
                 Text = "Manage Rooms",
                 Location = new System.Drawing.Point(50, 100),
-                Size = new System.Drawing.Size(150, 40)
+                Size = new System.Drawing.Size(300, 40)
             };
             roomButton.Click += RoomButton_Click;
 
@@ -44,12 +44,12 @@ namespace HotelManagement.Forms
             {
                 Text = "Manage Reservations",
                 Location = new System.Drawing.Point(50, 150),
-                Size = new System.Drawing.Size(150, 40)
+                Size = new System.Drawing.Size(300, 40)
             };
             reservationButton.Click += ReservationButton_Click;
 
             // Add controls to form
-            this.Controls.Add(menuStrip);
+            //this.Controls.Add(menuStrip);
             this.Controls.Add(guestButton);
             this.Controls.Add(roomButton);
             this.Controls.Add(reservationButton);

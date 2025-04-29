@@ -54,9 +54,12 @@ namespace HotelManagement.Forms
         {
             InitializeComponent();
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void ViewServices_Click(object sender, EventArgs e)
         {
+            DataGridViewRow selectedRow = reservationGridView.SelectedRows[0];
+            int resID = Convert.ToInt32(selectedRow.Cells["Reservation_ID"].Value);
+            ReservationServicesForm resServiceForm = new ReservationServicesForm(resID);
+            resServiceForm.ShowDialog();
 
         }
 
@@ -189,7 +192,7 @@ namespace HotelManagement.Forms
             viewServices.TabIndex = 4;
             viewServices.Text = "View Services";
             viewServices.UseVisualStyleBackColor = true;
-            viewServices.Click += button1_Click;
+            viewServices.Click += ViewServices_Click;
             // 
             // viewPayments
             // 
