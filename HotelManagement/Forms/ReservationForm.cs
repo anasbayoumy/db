@@ -22,8 +22,8 @@ namespace HotelManagement.Forms
                 {
                     if (connection != null)
                     {
-                        string query = @"SELECT DISTINCT res.Reservation_ID, res.Guest_ID, g.Name, res.Check_in_Date,
-                                       res.Check_out_Date, h.Hotel_ID, h.Name, r.Room_Num, r.Category, res.Status
+                        string query = @"SELECT res.Reservation_ID, res.Guest_ID, g.Name as 'Guest_Name', res.Check_in_Date,
+                                       res.Check_out_Date, h.Hotel_ID, h.Name as 'Hotel_Name', r.Room_Num, r.Category, res.Status
                                        FROM Reservation res
                                        JOIN Reservation_Rooms rr on res.Reservation_ID = rr.Reservation_ID 
                                        JOIN Hotel h ON rr.Hotel_ID = h.Hotel_ID

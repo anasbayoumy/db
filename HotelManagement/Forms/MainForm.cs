@@ -48,11 +48,56 @@ namespace HotelManagement.Forms
             };
             reservationButton.Click += ReservationButton_Click;
 
+            Button CategoryButton = new Button
+            {
+                Text = "Manage Room Categories",
+                Location = new System.Drawing.Point(50, 200),
+                Size = new System.Drawing.Size(300, 40)
+            };
+            CategoryButton.Click += CategoryButton_Click;
+
+            Button hotelButton = new Button
+            {
+                Text = "Manage Hotels",
+                Location = new System.Drawing.Point(50, 250),
+                Size = new System.Drawing.Size(300, 40)
+            };
+            hotelButton.Click += HotelButton_Click;
+
+            Button servicesButton = new Button
+            {
+                Text = "Manage Services",
+                Location = new System.Drawing.Point(50, 300),
+                Size = new System.Drawing.Size(300, 40)
+            };
+            servicesButton.Click += ServicesButton_Click;
+
+            Button paymentButton = new Button
+            {
+                Text = "Manage Payment",
+                Location = new System.Drawing.Point(50, 350),
+                Size = new System.Drawing.Size(300, 40)
+            };
+            paymentButton.Click += PaymentButton_Click;
+
+            Button feedbackButton = new Button
+            {
+                Text = "Manage Feecback",
+                Location = new System.Drawing.Point(50, 400),
+                Size = new System.Drawing.Size(300, 40)
+            };
+            feedbackButton.Click += FeedbackButton_Click;
+
             // Add controls to form
             //this.Controls.Add(menuStrip);
             this.Controls.Add(guestButton);
             this.Controls.Add(roomButton);
             this.Controls.Add(reservationButton);
+            this.Controls.Add(CategoryButton);
+            this.Controls.Add(hotelButton);
+            this.Controls.Add(servicesButton);
+            this.Controls.Add(paymentButton);
+            this.Controls.Add(feedbackButton);
         }
 
         private void GuestButton_Click(object sender, EventArgs e)
@@ -68,6 +113,31 @@ namespace HotelManagement.Forms
         }
 
         private void ReservationButton_Click(object sender, EventArgs e)
+        {
+            ReservationForm reservationForm = new ReservationForm();
+            reservationForm.ShowDialog();
+        }
+        private void CategoryButton_Click(object sender, EventArgs e)
+        {
+            ReservationForm reservationForm = new ReservationForm();
+            reservationForm.ShowDialog();
+        }
+        private void HotelButton_Click(object sender, EventArgs e)
+        {
+            ReservationForm reservationForm = new ReservationForm();
+            reservationForm.ShowDialog();
+        }
+        private void ServicesButton_Click(object sender, EventArgs e)
+        {
+            ReservationForm reservationForm = new ReservationForm();
+            reservationForm.ShowDialog();
+        }
+        private void PaymentButton_Click(object sender, EventArgs e)
+        {
+            ReservationForm reservationForm = new ReservationForm();
+            reservationForm.ShowDialog();
+        }
+        private void FeedbackButton_Click(object sender, EventArgs e)
         {
             ReservationForm reservationForm = new ReservationForm();
             reservationForm.ShowDialog();
