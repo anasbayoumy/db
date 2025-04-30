@@ -13,6 +13,7 @@ namespace HotelManagement.Forms
         private Button updateButton;
         private Button deleteButton;
         private Button refreshButton;
+        private Button phonesButton;
 
         public GuestForm()
         {
@@ -40,30 +41,38 @@ namespace HotelManagement.Forms
             {
                 Text = "Add Guest",
                 Location = new System.Drawing.Point(20, 440),
-                Size = new System.Drawing.Size(100, 30)
+                Size = new System.Drawing.Size(120, 30)
             };
             addButton.Click += AddButton_Click;
 
             updateButton = new Button
             {
                 Text = "Update Guest",
-                Location = new System.Drawing.Point(140, 440),
-                Size = new System.Drawing.Size(100, 30)
+                Location = new System.Drawing.Point(155, 440),
+                Size = new System.Drawing.Size(120, 30)
             };
             updateButton.Click += UpdateButton_Click;
 
             deleteButton = new Button
             {
                 Text = "Delete Guest",
-                Location = new System.Drawing.Point(260, 440),
-                Size = new System.Drawing.Size(100, 30)
+                Location = new System.Drawing.Point(285, 440),
+                Size = new System.Drawing.Size(120, 30)
             };
             deleteButton.Click += DeleteButton_Click;
+
+            phonesButton = new Button
+            {
+                Text = "View phones",
+                Location = new System.Drawing.Point(415, 440),
+                Size = new System.Drawing.Size(120, 30)
+            };
+            phonesButton.Click += PhonesButton_Click;
 
             refreshButton = new Button
             {
                 Text = "Refresh",
-                Location = new System.Drawing.Point(380, 440),
+                Location = new System.Drawing.Point(545, 440),
                 Size = new System.Drawing.Size(100, 30)
             };
             refreshButton.Click += RefreshButton_Click;
@@ -74,6 +83,7 @@ namespace HotelManagement.Forms
             this.Controls.Add(updateButton);
             this.Controls.Add(deleteButton);
             this.Controls.Add(refreshButton);
+            this.Controls.Add(phonesButton);
         }
 
         private void LoadGuestData()
@@ -89,6 +99,7 @@ namespace HotelManagement.Forms
                         DataTable dataTable = new DataTable();
                         adapter.Fill(dataTable);
                         guestGridView.DataSource = dataTable;
+                        guestGridView.Columns["Email"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                     }
                 }
             }
@@ -165,6 +176,17 @@ namespace HotelManagement.Forms
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             LoadGuestData();
+        }
+
+        private void PhonesButton_Click(object sender, EventArgs e)
+        {
+            if (guestGridView.SelectedRows.Count == 1)
+            {
+                DataGridViewRow selectedRow = guestGridView.SelectedRows[0];
+                int guestId = Convert.ToInt32(selectedRow.Cells["Guest_ID"].Value);
+                GuestPhonesForm phones = new GuestPhonesForm(guestId);
+                phones.ShowDialog();
+            }
         }
     }
 } 

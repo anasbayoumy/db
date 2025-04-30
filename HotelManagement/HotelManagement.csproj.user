@@ -5,6 +5,9 @@
     <Compile Update="Forms\AddGuestForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\AddPhoneForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\AddReservationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -12,6 +15,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\AddServiceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\GuestPhonesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\ReservationServicesForm.cs">
