@@ -46,6 +46,7 @@ namespace HotelManagement.Forms
             RservationServicesGrid.Name = "RservationServicesGrid";
             RservationServicesGrid.RowHeadersWidth = 51;
             RservationServicesGrid.RowTemplate.Height = 29;
+            RservationServicesGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             RservationServicesGrid.Size = new Size(800, 207);
             RservationServicesGrid.TabIndex = 0;
             // 
@@ -89,7 +90,7 @@ namespace HotelManagement.Forms
             Controls.Add(UpdateService);
             Controls.Add(RservationServicesGrid);
             Name = "ReservationServicesForm";
-            Text = "Form1";
+            Text = "Services added";
             ((System.ComponentModel.ISupportInitialize)RservationServicesGrid).EndInit();
             ResumeLayout(false);
         }

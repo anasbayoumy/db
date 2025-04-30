@@ -40,7 +40,7 @@ namespace HotelManagement.Forms
                         reservationGridView.DataSource = dataTable;
                         reservationGridView.Columns["Hotel_ID"].Visible = false;
                         reservationGridView.Columns["Guest_ID"].Visible = false;
-                        
+
                     }
                 }
             }
@@ -183,6 +183,7 @@ namespace HotelManagement.Forms
             DeleteReservation.TabIndex = 3;
             DeleteReservation.Text = "Delete";
             DeleteReservation.UseVisualStyleBackColor = true;
+            DeleteReservation.Click += DeleteReservation_Click;
             // 
             // viewServices
             // 
@@ -222,5 +223,57 @@ namespace HotelManagement.Forms
         private Button DeleteReservation;
         private Button viewServices;
         private Button viewPayments;
+
+        private void DeleteReservation_Click(object sender, EventArgs e)
+        {
+            if (reservationGridView.SelectedRows.Count == 1)
+            {
+                DataGridViewRow selectedRow = reservationGridView.SelectedRows[0];
+                int reservationID = Convert.ToInt32(selectedRow.Cells["Reservation_ID"].Value);
+
+                if (MessageBox.Show("Are you sure you want to delete this reservation?", "Confirm Delete",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                        {
+                            if (connection != null)
+                            {
+                                // First check if the room has any reservations
+                                string checkQuery = "SELECT COUNT(*) FROM Payment WHERE Reservation_ID = @Reservation_ID";
+                                MySqlCommand checkCommand = new MySqlCommand(checkQuery, connection);
+                                checkCommand.Parameters.AddWithValue("@Reservation_ID", reservationID);
+                                int reservationPaymentCount = Convert.ToInt32(checkCommand.ExecuteScalar());
+
+                                if (reservationPaymentCount > 0)
+                                {
+                                    MessageBox.Show("Cannot delete reservation, a payment was made already.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+
+                                string query = "DELETE FROM Reservation_Service WHERE Reservation_ID = @Reservation_ID";
+                                MySqlCommand command = new MySqlCommand(query, connection);
+                                command.Parameters.AddWithValue("@Reservation_ID",reservationID);
+                                command.ExecuteNonQuery();
+
+                                string query2 = "DELETE FROM Reservation WHERE Reservation_ID = @Reservation_ID";
+                                MySqlCommand command2 = new MySqlCommand(query, connection);
+                                command.Parameters.AddWithValue("@Reservation_ID", reservationID);
+                                command.ExecuteNonQuery();
+                                LoadReservations();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deleting reservation: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select one reservation to delete.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 } 
