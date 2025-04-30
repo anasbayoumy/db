@@ -251,15 +251,20 @@ namespace HotelManagement.Forms
                                     MessageBox.Show("Cannot delete reservation, a payment was made already.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
 
-                                string query = "DELETE FROM Reservation_Service WHERE Reservation_ID = @Reservation_ID";
-                                MySqlCommand command = new MySqlCommand(query, connection);
+                                string delete1 = "DELETE FROM Reservation_Service WHERE Reservation_ID = @Reservation_ID";
+                                MySqlCommand command = new MySqlCommand(delete1, connection);
                                 command.Parameters.AddWithValue("@Reservation_ID",reservationID);
                                 command.ExecuteNonQuery();
 
-                                string query2 = "DELETE FROM Reservation WHERE Reservation_ID = @Reservation_ID";
-                                MySqlCommand command2 = new MySqlCommand(query, connection);
-                                command.Parameters.AddWithValue("@Reservation_ID", reservationID);
-                                command.ExecuteNonQuery();
+                                string delete2 = "DELETE FROM Reservation_Rooms WHERE Reservation_ID = @Reservation_ID";
+                                MySqlCommand command2 = new MySqlCommand(delete2, connection);
+                                command2.Parameters.AddWithValue("@Reservation_ID", reservationID);
+                                command2.ExecuteNonQuery();
+
+                                string delete3 = "DELETE FROM Reservation WHERE Reservation_ID = @Reservation_ID";
+                                MySqlCommand command3 = new MySqlCommand(delete3, connection);
+                                command3.Parameters.AddWithValue("@Reservation_ID", reservationID);
+                                command3.ExecuteNonQuery();
                                 LoadReservations();
                             }
                         }
