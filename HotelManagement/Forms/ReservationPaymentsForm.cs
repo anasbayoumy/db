@@ -117,12 +117,24 @@ namespace HotelManagement.Forms
 
         private void AddPayment_Click(object sender, EventArgs e)
         {
-
+            using(AddResPaymentForm payment = new AddResPaymentForm(this.ReservationID))
+            {
+                payment.ShowDialog();
+            }
+            Amount.Text = loadAmountDue().ToString();
+            LoadPayments();
         }
 
         private void updatePayment_Click(object sender, EventArgs e)
         {
-
+            DataGridViewRow selectedRow = ReservationPaymentsGrid.SelectedRows[0];
+            int PaymentID = Convert.ToInt32(selectedRow.Cells["Payment_ID"].Value);
+            using (UpdatePaymentForm payment = new UpdatePaymentForm(PaymentID))
+            {
+                payment.ShowDialog();
+            }
+            Amount.Text = loadAmountDue().ToString();
+            LoadPayments();
         }
 
         private void DeletePayment_Click(object sender, EventArgs e)

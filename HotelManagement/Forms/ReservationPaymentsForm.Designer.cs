@@ -47,6 +47,7 @@
             ReservationPaymentsGrid.Name = "ReservationPaymentsGrid";
             ReservationPaymentsGrid.RowHeadersWidth = 51;
             ReservationPaymentsGrid.RowTemplate.Height = 29;
+            ReservationPaymentsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             ReservationPaymentsGrid.Size = new Size(800, 233);
             ReservationPaymentsGrid.TabIndex = 0;
             // 
