@@ -29,7 +29,7 @@ namespace HotelManagement.Forms
                 using (MySqlConnection conn = DatabaseConnection.GetConnection())
                 {
                     //Amount due from services
-                    int servicesCost;
+                    int servicesCost=0;
                     string query1 = @"select SUM(res.quantity * s.Cost)
                                     from Reservation_Service res
                                     join Service s on res.Service_ID = s.Service_ID
@@ -37,50 +37,95 @@ namespace HotelManagement.Forms
                                     ";
                     MySqlCommand cmd1 = new MySqlCommand(query1, conn);
                     cmd1.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                    servicesCost = Convert.ToInt32(cmd1.ExecuteScalar());
+                    var res1 = cmd1.ExecuteScalar();
+                    if (res1 != DBNull.Value)
+                    {
+                        servicesCost = Convert.ToInt32(res1);
+                    }
                     //Get number of nights
-                    int nights;
+                    int nights=0;
                     string query2 = @"select DATEDIFF(Check_out_Date, Check_in_Date)
                                       from Reservation
                                       where Reservation_ID = @Reservation_ID
                                     ";
                     MySqlCommand cmd2 = new MySqlCommand(query2, conn);
                     cmd2.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                    nights = Convert.ToInt32(cmd2.ExecuteScalar());
+                    var res2 = cmd2.ExecuteScalar();
+                    if (res2 != DBNull.Value)
+                    {
+                        nights = Convert.ToInt32(res2);
+                    }
                     //Amount due from rooms prices
-                    int RoomsCost;
+                    int RoomsCost=0;
                     string query3 = @"select SUM(c.Price * @Nights)
                                       from Reservation_Rooms res
                                       join Room r on res.Room_Num = r.Room_Num and res.Hotel_ID = r.Hotel_ID
                                       join Room_Category c on res.Hotel_ID = c.Hotel_ID and r.Category = c.Category
                                       where res.Reservation_ID = @Reservation_ID
-                                    "; 
+                                    ";
                     MySqlCommand cmd3 = new MySqlCommand(query3, conn);
                     cmd3.Parameters.AddWithValue("@Nights", nights);
                     cmd3.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                    RoomsCost = Convert.ToInt32(cmd3.ExecuteScalar());
+                    var res3 = cmd3.ExecuteScalar();
+                    if (res3 != DBNull.Value)
+                    {
+                        RoomsCost = Convert.ToInt32(res3);
+                    }
+                    
 
                     int total = RoomsCost + servicesCost;
                     //Remove amount paid by any previous payments
-                    int paid;
+                    int paid = 0;
                     string query4 = @"select SUM(Amount)
                                       from Payment
                                       where Reservation_ID = @Reservation_ID
                                     ";
                     MySqlCommand cmd4 = new MySqlCommand(query4, conn);
                     cmd4.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                    paid = Convert.ToInt32(cmd4.ExecuteScalar());
-
+                    var res4 = cmd4.ExecuteScalar();
+                    if (res4 != DBNull.Value)
+                    {
+                        paid = Convert.ToInt32(res4);
+                    }
                     int final = total - paid;
                     return final;
                 }
             }
-            catch (Exception ex) { 
-                    MessageBox.Show("Error: " +  ex.Message);
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
                 return -1;
             }
         }
         private void LoadPayments()
+        {
+            using (MySqlConnection conn = DatabaseConnection.GetConnection())
+            {
+                string query = @"Select *
+                                 from Payment
+                                 where Reservation_ID = @Reservation_ID
+                                ";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+                ReservationPaymentsGrid.DataSource = dataTable;
+            }
+
+        }
+
+        private void AddPayment_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void updatePayment_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DeletePayment_Click(object sender, EventArgs e)
         {
 
         }

@@ -6,7 +6,7 @@ namespace HotelManagement.Data
     public class DatabaseConnection
     {
         private static readonly string connectionString = "Server=77.37.35.50;Database=u153805899_dbproj;Uid=u153805899_dbproj;Pwd=Try213213;";
-
+        
         public static MySqlConnection GetConnection()
         {
             try

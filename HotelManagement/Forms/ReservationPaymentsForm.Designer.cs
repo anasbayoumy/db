@@ -58,6 +58,7 @@
             AddPayment.TabIndex = 1;
             AddPayment.Text = "Add Payment";
             AddPayment.UseVisualStyleBackColor = true;
+            AddPayment.Click += AddPayment_Click;
             // 
             // updatePayment
             // 
@@ -67,6 +68,7 @@
             updatePayment.TabIndex = 2;
             updatePayment.Text = "Update";
             updatePayment.UseVisualStyleBackColor = true;
+            updatePayment.Click += updatePayment_Click;
             // 
             // DeletePayment
             // 
@@ -76,6 +78,7 @@
             DeletePayment.TabIndex = 3;
             DeletePayment.Text = "Delete";
             DeletePayment.UseVisualStyleBackColor = true;
+            DeletePayment.Click += DeletePayment_Click;
             // 
             // AmountDue
             // 
