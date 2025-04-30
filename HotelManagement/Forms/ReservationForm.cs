@@ -203,6 +203,7 @@ namespace HotelManagement.Forms
             viewPayments.TabIndex = 5;
             viewPayments.Text = "View Payments";
             viewPayments.UseVisualStyleBackColor = true;
+            viewPayments.Click += viewPayments_Click;
             // 
             // ReservationForm
             // 
@@ -253,7 +254,7 @@ namespace HotelManagement.Forms
 
                                 string delete1 = "DELETE FROM Reservation_Service WHERE Reservation_ID = @Reservation_ID";
                                 MySqlCommand command = new MySqlCommand(delete1, connection);
-                                command.Parameters.AddWithValue("@Reservation_ID",reservationID);
+                                command.Parameters.AddWithValue("@Reservation_ID", reservationID);
                                 command.ExecuteNonQuery();
 
                                 string delete2 = "DELETE FROM Reservation_Rooms WHERE Reservation_ID = @Reservation_ID";
@@ -278,6 +279,17 @@ namespace HotelManagement.Forms
             else
             {
                 MessageBox.Show("Please select one reservation to delete.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void viewPayments_Click(object sender, EventArgs e)
+        {
+            if (reservationGridView.SelectedRows.Count == 1)
+            {
+                DataGridViewRow selectedRow = reservationGridView.SelectedRows[0];
+                int reservationID = Convert.ToInt32(selectedRow.Cells["Reservation_ID"].Value);
+                ReservationPaymentsForm payments = new ReservationPaymentsForm(reservationID);
+                payments.ShowDialog();
             }
         }
     }

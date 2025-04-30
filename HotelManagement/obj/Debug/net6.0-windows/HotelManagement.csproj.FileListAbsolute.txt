@@ -74,3 +74,5 @@ C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-wind
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.UpdateServiceForm.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.GuestPhonesForm.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.AddPhoneForm.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.AddReservationForm.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.ReservationPaymentsForm.resources
