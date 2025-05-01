@@ -5,6 +5,9 @@
     <Compile Update="Forms\AddEmailForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\AddFeedback.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\AddGuestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +62,9 @@
     <Compile Update="Forms\UpdateCategoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\UpdateFeedback.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\UpdateGuestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +87,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\ViewAllservicesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ViewFeedbackForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\ViewHotelEmailsForm.cs">

@@ -1,0 +1,121 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using HotelManagement.Data;
+using MySql.Data.MySqlClient;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+namespace HotelManagement.Forms
+{
+    public partial class AddFeedback : Form
+    {
+        public AddFeedback()
+        {
+            InitializeComponent();
+            loadData();
+        }
+
+        private void loadData()
+        {
+            LoadGuests();
+            LoadHotels();
+            for (int i = 1; i <= 5; i++)
+            {
+                RatingComboBox.Items.Add(i);
+            }
+            GuestComboBox.SelectedIndex = 0;
+            HotelComboBox.SelectedIndex = 0;
+            RatingComboBox.SelectedIndex = 0;
+        }
+        private void LoadGuests()
+        {
+            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            {
+                if (connection != null)
+                {
+                    //connection.Open();
+                    string query = "SELECT Guest_ID, Name FROM Guest";
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        dt.Columns.Add("DisplayText", typeof(string));
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            row["DisplayText"] = $"{row["Guest_ID"]} - {row["Name"]}";
+                        }
+                        GuestComboBox.DataSource = dt;
+                        GuestComboBox.DisplayMember = "DisplayText";
+                        GuestComboBox.ValueMember = "Guest_ID";
+                    }
+                }
+            }
+        }
+
+        private void LoadHotels()
+        {
+            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            {
+                if (connection != null)
+                {
+                    //connection.Open();
+                    string query = "SELECT Hotel_ID, Name FROM Hotel";
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        HotelComboBox.DataSource = dt;
+                        dt.Columns.Add("DisplayText", typeof(string));
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
+                        }
+                        HotelComboBox.DisplayMember = "DisplayText";
+                        HotelComboBox.ValueMember = "Hotel_ID";
+                    }
+                }
+            }
+        }
+        private void Add_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (CommentTextBox.Text == null)
+                {
+                    MessageBox.Show("Please enter a comment");
+                    return;
+                }
+                int HotelID = Convert.ToInt32(HotelComboBox.SelectedValue);
+                int GuestID = Convert.ToInt32(GuestComboBox.SelectedValue);
+                int Rating = Convert.ToInt32(RatingComboBox.SelectedItem);
+                DateTime date = DateTime.Now;
+                using (MySqlConnection con = DatabaseConnection.GetConnection())
+                {
+                    string query = @"Insert into Feedback(Guest_ID, Hotel_ID, Rating, Comments, Feedback_Date)
+                                values(@Guest_ID, @Hotel_ID, @Rating, @Comments, @Feedback_Date)
+                                ";
+                    MySqlCommand cmd = new MySqlCommand(@query, con);
+                    cmd.Parameters.AddWithValue("@Guest_ID", GuestID);
+                    cmd.Parameters.AddWithValue("@Hotel_ID", HotelID);
+                    cmd.Parameters.AddWithValue("@Rating", Rating);
+                    cmd.Parameters.AddWithValue("@Comments", CommentTextBox.Text);
+                    cmd.Parameters.AddWithValue("@Feedback_Date", date);
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Added");
+                    this.Close();
+                }
+            }
+            catch (Exception ex) {
+                MessageBox.Show("Error " + ex.Message);
+            }
+        }
+    }
+}

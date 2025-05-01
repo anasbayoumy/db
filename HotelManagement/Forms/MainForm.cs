@@ -82,7 +82,7 @@ namespace HotelManagement.Forms
 
             Button feedbackButton = new Button
             {
-                Text = "Manage Feecback",
+                Text = "Manage Feedback",
                 Location = new System.Drawing.Point(50, 400),
                 Size = new System.Drawing.Size(300, 40)
             };
@@ -139,8 +139,8 @@ namespace HotelManagement.Forms
         }
         private void FeedbackButton_Click(object sender, EventArgs e)
         {
-            ReservationForm reservationForm = new ReservationForm();
-            reservationForm.ShowDialog();
+            ViewFeedbackForm feedbackForm = new ViewFeedbackForm();
+            feedbackForm.ShowDialog();
         }
     }
 } 
