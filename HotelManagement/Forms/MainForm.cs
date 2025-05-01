@@ -134,8 +134,8 @@ namespace HotelManagement.Forms
         }
         private void PaymentButton_Click(object sender, EventArgs e)
         {
-            ReservationForm reservationForm = new ReservationForm();
-            reservationForm.ShowDialog();
+            ViewAllPaymentsForm payment = new ViewAllPaymentsForm();
+            payment.ShowDialog();
         }
         private void FeedbackButton_Click(object sender, EventArgs e)
         {

@@ -12,15 +12,28 @@ using MySql.Data.MySqlClient;
 
 namespace HotelManagement.Forms
 {
-    public partial class AddResPaymentForm : Form
+    public partial class AddPaymentForm : Form
     {
-        int Reservation_ID;
-        public AddResPaymentForm(int Reservation_ID)
+        public AddPaymentForm()
         {
-            this.Reservation_ID = Reservation_ID;
             InitializeComponent();
-            methodComboBox.Items.AddRange(new string[] {"Cash", "Credit Card", "Online Transfer" });
+            LoadData();
+        }
+        private void LoadData()
+        {
+            methodComboBox.Items.AddRange(new string[] { "Cash", "Credit Card", "Online Transfer" });
             methodComboBox.SelectedIndex = 0;
+            using (MySqlConnection con = DatabaseConnection.GetConnection()) {
+                string query = "Select Reservation_ID from Reservation";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+                ReservationComboBox.DataSource = dt;
+                ReservationComboBox.DisplayMember = "Reservation_ID";
+                ReservationComboBox.ValueMember = "Reservation_ID";
+            }
+            ReservationComboBox.SelectedIndex = 0;
         }
 
         private void AddButton_Click(object sender, EventArgs e)
@@ -31,6 +44,7 @@ namespace HotelManagement.Forms
                 return;
             }
             String method = methodComboBox.SelectedItem as string;
+            int resId = Convert.ToInt32(ReservationComboBox.SelectedValue);
             DateTime Payment_Date = DateTime.Now;
             try
             {
@@ -40,7 +54,7 @@ namespace HotelManagement.Forms
                                  values(@Reservation_ID, @Payment_Date, @Amount, @Payment_Method)
                                 ";
                     MySqlCommand cmd = new MySqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
+                    cmd.Parameters.AddWithValue("@Reservation_ID", resId);
                     cmd.Parameters.AddWithValue("@Payment_Date", Payment_Date);
                     cmd.Parameters.AddWithValue("@Amount", amount);
                     cmd.Parameters.AddWithValue("@Payment_Method", method);

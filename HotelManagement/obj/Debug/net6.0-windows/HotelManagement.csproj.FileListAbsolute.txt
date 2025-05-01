@@ -89,3 +89,5 @@ C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-wind
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.ViewAllservicesForm.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.AddNewService.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.UpdateServiceDataForm.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.AddPaymentForm.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.ViewAllPaymentsForm.resources
