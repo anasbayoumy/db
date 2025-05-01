@@ -203,7 +203,7 @@ namespace HotelManagement.Forms
                     checkCmd.Parameters.AddWithValue("@CheckIn", checkIn);
                     checkCmd.Parameters.AddWithValue("@CheckOut", checkOut);
 
-                    long count = (long)checkCmd.ExecuteScalar();
+                    int count = (int)checkCmd.ExecuteScalar();
                     if (count > 0)
                     {
                         MessageBox.Show($"Room {roomNum} is already booked in the selected dates.", "Room Unavailable", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -260,8 +260,5 @@ namespace HotelManagement.Forms
             }
         }
 
-
-        // No need to override Dispose unless you manage unmanaged resources.
-        // You can now use this form with `using`.
     }
 }
