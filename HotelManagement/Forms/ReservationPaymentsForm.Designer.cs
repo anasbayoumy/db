@@ -44,6 +44,7 @@
             ReservationPaymentsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             ReservationPaymentsGrid.Dock = DockStyle.Top;
             ReservationPaymentsGrid.Location = new Point(0, 0);
+            ReservationPaymentsGrid.MultiSelect = false;
             ReservationPaymentsGrid.Name = "ReservationPaymentsGrid";
             ReservationPaymentsGrid.RowHeadersWidth = 51;
             ReservationPaymentsGrid.RowTemplate.Height = 29;

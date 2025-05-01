@@ -127,19 +127,46 @@ namespace HotelManagement.Forms
 
         private void updatePayment_Click(object sender, EventArgs e)
         {
-            DataGridViewRow selectedRow = ReservationPaymentsGrid.SelectedRows[0];
-            int PaymentID = Convert.ToInt32(selectedRow.Cells["Payment_ID"].Value);
-            using (UpdatePaymentForm payment = new UpdatePaymentForm(PaymentID))
+            if (ReservationPaymentsGrid.SelectedRows.Count == 1)
             {
-                payment.ShowDialog();
+                DataGridViewRow selectedRow = ReservationPaymentsGrid.SelectedRows[0];
+                int PaymentID = Convert.ToInt32(selectedRow.Cells["Payment_ID"].Value);
+                using (UpdatePaymentForm payment = new UpdatePaymentForm(PaymentID))
+                {
+                    payment.ShowDialog();
+                }
+                Amount.Text = loadAmountDue().ToString();
+                LoadPayments();
             }
-            Amount.Text = loadAmountDue().ToString();
-            LoadPayments();
         }
 
         private void DeletePayment_Click(object sender, EventArgs e)
         {
-
+            if (ReservationPaymentsGrid.SelectedRows.Count == 1)
+            {
+                if (MessageBox.Show("Are you sure you want to delete this reservation?", "Confirm Delete",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    DataGridViewRow selectedRow = ReservationPaymentsGrid.SelectedRows[0];
+                    int PaymentID = Convert.ToInt32(selectedRow.Cells["Payment_ID"].Value);
+                    using (MySqlConnection con = DatabaseConnection.GetConnection())
+                    {
+                        string query = @"Delete from Payment
+                                         where Payment_ID = @Payment_ID
+                                        ";
+                        MySqlCommand cmd = new MySqlCommand(query, con);
+                        cmd.Parameters.AddWithValue("@Payment_ID", PaymentID);
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Deleted");
+                        Amount.Text = loadAmountDue().ToString();
+                        LoadPayments() ;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select one row");
+            }
         }
     }
 }
