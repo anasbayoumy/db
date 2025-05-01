@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Google.Protobuf.Reflection;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -38,11 +38,11 @@ namespace HotelManagement.Forms
             }
             try
             {
-                using (MySqlConnection con = DatabaseConnection.GetConnection()) {
+                using (SqlConnection con = DatabaseConnection.GetConnection()) {
                     string query = @"Insert into Service(Service_Name, Description, Cost)
                                      values(@Name, @Description, @Cost)
                                     ";
-                    MySqlCommand cmd = new MySqlCommand(query, con);
+                    SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@Name", NameTextBox.Text);
                     cmd.Parameters.AddWithValue("@Description",DescriptionTextBox.Text);
                     cmd.Parameters.AddWithValue("@Cost", price);

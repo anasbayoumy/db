@@ -1,7 +1,8 @@
 using System;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using HotelManagement.Data;
+using System.Data;
 
 namespace HotelManagement.Forms
 {
@@ -94,13 +95,13 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     if (connection != null)
                     {
                         string query = "SELECT Hotel_ID, Name FROM Hotel";
-                        MySqlCommand command = new MySqlCommand(query, connection);
-                        using (MySqlDataReader reader = command.ExecuteReader())
+                        SqlCommand command = new SqlCommand(query, connection);
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -126,13 +127,13 @@ namespace HotelManagement.Forms
             {
                 try
                 {
-                    using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                    using (SqlConnection connection = DatabaseConnection.GetConnection())
                     {
                         if (connection != null)
                         {
                             // Check if room number already exists in the selected hotel
                             string checkQuery = "SELECT COUNT(*) FROM Room WHERE Hotel_ID = @Hotel_ID AND Room_Num = @Room_Num";
-                            MySqlCommand checkCommand = new MySqlCommand(checkQuery, connection);
+                            SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
                             var selectedHotel = (ComboBoxItem)hotelComboBox.SelectedItem;
                             checkCommand.Parameters.AddWithValue("@Hotel_ID", selectedHotel.Id);
                             checkCommand.Parameters.AddWithValue("@Room_Num", roomNumTextBox.Text);
@@ -148,7 +149,7 @@ namespace HotelManagement.Forms
                             string query = @"INSERT INTO Room (Hotel_ID, Room_Num, Category, Status)
                                            VALUES (@Hotel_ID, @Room_Num, @Category, @Status)";
 
-                            MySqlCommand command = new MySqlCommand(query, connection);
+                            SqlCommand command = new SqlCommand(query, connection);
                             command.Parameters.AddWithValue("@Hotel_ID", selectedHotel.Id);
                             command.Parameters.AddWithValue("@Room_Num", roomNumTextBox.Text);
                             command.Parameters.AddWithValue("@Category", categoryComboBox.SelectedItem.ToString());

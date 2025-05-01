@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -26,16 +26,16 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     String query = @"Select s.Service_Name, s.Description, res.Quantity, res.Quantity*s.Cost as 'TotalCost', res.Service_ID
                                         from Reservation_Service res
                                         Join Service s on res.Service_ID = s.Service_ID
                                         where res.Reservation_ID = @Reservation_ID
                                         ";
-                    MySqlCommand command = new MySqlCommand(query, connection);
+                    SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
-                    MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
                     DataTable dataTable = new DataTable();
                     adapter.Fill(dataTable);
                     RservationServicesGrid.DataSource = dataTable;
@@ -83,12 +83,12 @@ namespace HotelManagement.Forms
                     int service_ID = Convert.ToInt32(selectedRow.Cells["Service_ID"].Value);
                     try
                     {
-                        using (MySqlConnection conn = DatabaseConnection.GetConnection())
+                        using (SqlConnection conn = DatabaseConnection.GetConnection())
                         {
                             string delete = @"Delete from Reservation_Service
                                       where Reservation_ID = @Reservation_ID and Service_ID = @Service_ID
                                      ";
-                            MySqlCommand command = new MySqlCommand(delete, conn);
+                            SqlCommand command = new SqlCommand(delete, conn);
                             command.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
                             command.Parameters.AddWithValue("@Service_ID", service_ID);
                             command.ExecuteNonQuery();

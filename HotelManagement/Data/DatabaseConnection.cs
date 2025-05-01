@@ -1,17 +1,18 @@
-using MySql.Data.MySqlClient;
 using System;
+using System.Data.SqlClient;
+using System.Windows.Forms;
 
 namespace HotelManagement.Data
 {
     public class DatabaseConnection
     {
-        private static readonly string connectionString = "Server=77.37.35.50;Database=u153805899_dbproj;Uid=u153805899_dbproj;Pwd=Try213213;";
-        
-        public static MySqlConnection GetConnection()
+        private static string connectionString = "Data Source=.;Initial Catalog=HotelManagementSystem;Integrated Security=True;";
+
+        public static SqlConnection GetConnection()
         {
             try
             {
-                MySqlConnection connection = new MySqlConnection(connectionString);
+                SqlConnection connection = new SqlConnection(connectionString);
                 connection.Open();
                 return connection;
             }
@@ -24,7 +25,7 @@ namespace HotelManagement.Data
 
         public static bool TestConnection()
         {
-            using (MySqlConnection connection = GetConnection())
+            using (SqlConnection connection = GetConnection())
             {
                 if (connection != null)
                 {
@@ -35,4 +36,4 @@ namespace HotelManagement.Data
             }
         }
     }
-} 
+}

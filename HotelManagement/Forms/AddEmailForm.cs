@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -28,11 +28,11 @@ namespace HotelManagement.Forms
                 MessageBox.Show("Enter an email");
                 return;
             }
-            using (MySqlConnection con = DatabaseConnection.GetConnection()) {
+            using (SqlConnection con = DatabaseConnection.GetConnection()) {
                 string query = @" Insert into Hotel_emails (Hotel_ID, Email)
                                   values(@HotelID, @Email)
                                 ";
-                MySqlCommand cmd = new MySqlCommand(query, con);
+                SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@HotelID", this.hotelID);
                 cmd.Parameters.AddWithValue("@Email", Emailtextbox.Text);
                 cmd.ExecuteNonQuery();

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Google.Protobuf.Reflection;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using Org.BouncyCastle.Utilities.Collections;
 
 namespace HotelManagement.Forms
@@ -29,12 +29,12 @@ namespace HotelManagement.Forms
 
         private void LoadQuantity()
         {
-            using (MySqlConnection conn = DatabaseConnection.GetConnection())
+            using (SqlConnection conn = DatabaseConnection.GetConnection())
             {
                 string query = @"Select Quantity from Reservation_Service
                                 where Reservation_ID = @Reservation_ID and Service_ID = @Service_ID
                                 ";
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
                 cmd.Parameters.AddWithValue("@Service_ID", this.Service_ID);
                 int quantity = (int)cmd.ExecuteScalar();
@@ -51,7 +51,7 @@ namespace HotelManagement.Forms
 
         private void Update_Click(object sender, EventArgs e)
         {
-            using (MySqlConnection conn = DatabaseConnection.GetConnection())
+            using (SqlConnection conn = DatabaseConnection.GetConnection())
             {
                 try
                 {
@@ -59,7 +59,7 @@ namespace HotelManagement.Forms
                                     set Quantity = @Quantity
                                     where Reservation_ID = @Reservation_ID and Service_ID = @Service_ID
                                     ";
-                    MySqlCommand cmd = new MySqlCommand(update, conn);
+                    SqlCommand cmd = new SqlCommand(update, conn);
                     cmd.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
                     cmd.Parameters.AddWithValue("@Service_ID", this.Service_ID);
                     cmd.Parameters.AddWithValue("@Quantity", QuantityCounter.Value);

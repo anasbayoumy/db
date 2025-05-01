@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HotelManagement.Forms
@@ -35,15 +35,15 @@ namespace HotelManagement.Forms
         }
         private void LoadGuests()
         {
-            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 if (connection != null)
                 {
                     //connection.Open();
                     string query = "SELECT Guest_ID, Name FROM Guest";
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         dt.Columns.Add("DisplayText", typeof(string));
@@ -61,15 +61,15 @@ namespace HotelManagement.Forms
 
         private void LoadHotels()
         {
-            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 if (connection != null)
                 {
                     //connection.Open();
                     string query = "SELECT Hotel_ID, Name FROM Hotel";
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         HotelComboBox.DataSource = dt;
@@ -97,12 +97,12 @@ namespace HotelManagement.Forms
                 int GuestID = Convert.ToInt32(GuestComboBox.SelectedValue);
                 int Rating = Convert.ToInt32(RatingComboBox.SelectedItem);
                 DateTime date = DateTime.Now;
-                using (MySqlConnection con = DatabaseConnection.GetConnection())
+                using (SqlConnection con = DatabaseConnection.GetConnection())
                 {
                     string query = @"Insert into Feedback(Guest_ID, Hotel_ID, Rating, Comments, Feedback_Date)
                                 values(@Guest_ID, @Hotel_ID, @Rating, @Comments, @Feedback_Date)
                                 ";
-                    MySqlCommand cmd = new MySqlCommand(@query, con);
+                    SqlCommand cmd = new SqlCommand(@query, con);
                     cmd.Parameters.AddWithValue("@Guest_ID", GuestID);
                     cmd.Parameters.AddWithValue("@Hotel_ID", HotelID);
                     cmd.Parameters.AddWithValue("@Rating", Rating);

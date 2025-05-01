@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -24,14 +24,14 @@ namespace HotelManagement.Forms
 
         private void LoadEmails()
         {
-            using (MySqlConnection con = DatabaseConnection.GetConnection())
+            using (SqlConnection con = DatabaseConnection.GetConnection())
             {
                 string query = @"Select * from Hotel_emails
                                  where Hotel_ID = @HotelID
                                 ";
-                MySqlCommand cmd = new MySqlCommand(query, con);
+                SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@HotelID", this.HotelID);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 EmailsGrid.DataSource = dt;
@@ -50,11 +50,11 @@ namespace HotelManagement.Forms
             {
                 DataGridViewRow selected = EmailsGrid.SelectedRows[0];
                 string email = selected.Cells["Email"].Value.ToString();
-                using (MySqlConnection con = DatabaseConnection.GetConnection()) {
+                using (SqlConnection con = DatabaseConnection.GetConnection()) {
                     string query = @"Delete from Hotel_emails
                                      where Hotel_ID = @Hotel_ID  and Email = @Email  
                                     ";
-                    MySqlCommand cmd = new MySqlCommand( query, con);
+                    SqlCommand cmd = new SqlCommand( query, con);
                     cmd.Parameters.AddWithValue("@Hotel_ID", this.HotelID);
                     cmd.Parameters.AddWithValue("@Email", email);
                     cmd.ExecuteNonQuery();

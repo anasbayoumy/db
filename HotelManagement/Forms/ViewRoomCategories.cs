@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -22,13 +22,13 @@ namespace HotelManagement.Forms
 
         private void LoadCategories()
         {
-            using (MySqlConnection con = DatabaseConnection.GetConnection())
+            using (SqlConnection con = DatabaseConnection.GetConnection())
             {
                 string query = @"Select c.Hotel_ID, h.Name, c.Category, c.Price
                                  from Room_Category c
                                  Join Hotel h on c.Hotel_ID = h.Hotel_ID
                                 ";
-                MySqlDataAdapter adapter = new MySqlDataAdapter(query, con);
+                SqlDataAdapter adapter = new SqlDataAdapter(query, con);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
                 RoomCategoriesGrid.DataSource = dataTable;
@@ -67,12 +67,12 @@ namespace HotelManagement.Forms
                     DataGridViewRow selectedRow = RoomCategoriesGrid.SelectedRows[0];
                     int Hotel_ID = Convert.ToInt32(selectedRow.Cells["Hotel_ID"].Value);
                     string catName = selectedRow.Cells["Category"].Value.ToString();
-                    using (MySqlConnection con = DatabaseConnection.GetConnection())
+                    using (SqlConnection con = DatabaseConnection.GetConnection())
                     {
                         string query = @"Delete from Room_Category
                                          where Hotel_ID = @Hotel_ID and Category = @Category
                                         ";
-                        MySqlCommand cmd = new MySqlCommand(query, con);
+                        SqlCommand cmd = new SqlCommand(query, con);
                         cmd.Parameters.AddWithValue("@Hotel_ID", Hotel_ID);
                         cmd.Parameters.AddWithValue("@Category", catName);
                         cmd.ExecuteNonQuery();

@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using HotelManagement.Data;
 
 namespace HotelManagement.Forms
@@ -89,14 +89,14 @@ namespace HotelManagement.Forms
             {
                 try
                 {
-                    using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                    using (SqlConnection connection = DatabaseConnection.GetConnection())
                     {
                         if (connection != null)
                         {
                             string query = @"INSERT INTO Guest (Name, Nationality, Gender, Date_of_Birth, Age, Passport_Number, email)
                                            VALUES (@Name, @Nationality, @Gender, @Date_of_Birth, @Age, @Passport_Number, @email)";
 
-                            MySqlCommand command = new MySqlCommand(query, connection);
+                            SqlCommand command = new SqlCommand(query, connection);
                             command.Parameters.AddWithValue("@Name", nameTextBox.Text);
                             command.Parameters.AddWithValue("@Nationality", nationalityTextBox.Text);
                             command.Parameters.AddWithValue("@Gender", genderComboBox.SelectedItem.ToString());

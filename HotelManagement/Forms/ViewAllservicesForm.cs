@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -21,11 +21,11 @@ namespace HotelManagement.Forms
         }
         public void LoadData()
         {
-            using (MySqlConnection con = DatabaseConnection.GetConnection())
+            using (SqlConnection con = DatabaseConnection.GetConnection())
             {
                 string query = @"Select * from Service";
-                MySqlCommand cmd = new MySqlCommand(query, con);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 ServicesGrid.DataSource = dt;
@@ -61,12 +61,12 @@ namespace HotelManagement.Forms
                 {
                     DataGridViewRow selected = ServicesGrid.SelectedRows[0];
                     int service_ID = Convert.ToInt32(selected.Cells["Service_ID"].Value);
-                    using (MySqlConnection con = DatabaseConnection.GetConnection())
+                    using (SqlConnection con = DatabaseConnection.GetConnection())
                     {
                         string query = @"Delete from Service 
                                      where Service_ID = @Service_ID
                                     ";
-                        MySqlCommand cmd = new MySqlCommand(query, con);
+                        SqlCommand cmd = new SqlCommand(query, con);
                         cmd.Parameters.AddWithValue("@Service_ID", service_ID);
                         cmd.ExecuteNonQuery();
                         LoadData();

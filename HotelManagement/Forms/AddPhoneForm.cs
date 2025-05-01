@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -25,12 +25,12 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection conn = DatabaseConnection.GetConnection())
+                using (SqlConnection conn = DatabaseConnection.GetConnection())
                 {
                     string query = @"Insert into Guest_Phone_nums(Guest_ID, Phone_number)
                                     values(@GuestID, @Phone)
                                     ";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@GuestID", this.GuestID);
                     cmd.Parameters.AddWithValue("@Phone", Phone.Text);
                     cmd.ExecuteNonQuery();

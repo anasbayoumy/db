@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -23,10 +23,10 @@ namespace HotelManagement.Forms
         {
             methodComboBox.Items.AddRange(new string[] { "Cash", "Credit Card", "Online Transfer" });
             methodComboBox.SelectedIndex = 0;
-            using (MySqlConnection con = DatabaseConnection.GetConnection()) {
+            using (SqlConnection con = DatabaseConnection.GetConnection()) {
                 string query = "Select Reservation_ID from Reservation";
-                MySqlCommand cmd = new MySqlCommand(query, con);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 ReservationComboBox.DataSource = dt;
@@ -48,12 +48,12 @@ namespace HotelManagement.Forms
             DateTime Payment_Date = DateTime.Now;
             try
             {
-                using (MySqlConnection con = DatabaseConnection.GetConnection())
+                using (SqlConnection con = DatabaseConnection.GetConnection())
                 {
                     string query = @"Insert into Payment(Reservation_ID, Payment_Date, Amount, Payment_Method)
                                  values(@Reservation_ID, @Payment_Date, @Amount, @Payment_Method)
                                 ";
-                    MySqlCommand cmd = new MySqlCommand(query, con);
+                    SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@Reservation_ID", resId);
                     cmd.Parameters.AddWithValue("@Payment_Date", Payment_Date);
                     cmd.Parameters.AddWithValue("@Amount", amount);
@@ -64,7 +64,7 @@ namespace HotelManagement.Forms
                                     set Status = 'Confirmed'
                                     where Reservation_ID = @Reservation_ID
                                     ";
-                    MySqlCommand cmd2 = new MySqlCommand(query2, con);
+                    SqlCommand cmd2 = new SqlCommand(query2, con);
                     cmd2.Parameters.AddWithValue("@Reservation_ID", resId);
                     cmd2.ExecuteNonQuery();
                     MessageBox.Show("Added");

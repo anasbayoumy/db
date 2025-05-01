@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -26,15 +26,15 @@ namespace HotelManagement.Forms
 
         private void loadData()
         {
-            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 if (connection != null)
                 {
                     string query = "SELECT * FROM Payment WHERE Payment_ID = @Payment_ID";
-                    MySqlCommand command = new MySqlCommand(query, connection);
+                    SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@Payment_ID", this.PaymentID);
 
-                    using (MySqlDataReader reader = command.ExecuteReader())
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -60,13 +60,13 @@ namespace HotelManagement.Forms
                 return;
             }
             String method = methodComboBox.SelectedItem as string;
-            using (MySqlConnection conn = DatabaseConnection.GetConnection())
+            using (SqlConnection conn = DatabaseConnection.GetConnection())
             {
                 string query = @"Update Payment
                                 set Amount = @Amount, Payment_Method = @Payment_Method
                                 where Payment_ID = @Payment_ID
                                 ";
-                MySqlCommand command = new MySqlCommand( query, conn);
+                SqlCommand command = new SqlCommand( query, conn);
                 command.Parameters.AddWithValue("@Amount", amount);
                 command.Parameters.AddWithValue("@Payment_Method", method);
                 command.Parameters.AddWithValue("@Payment_ID", this.PaymentID);

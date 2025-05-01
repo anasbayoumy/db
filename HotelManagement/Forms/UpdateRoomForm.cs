@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using HotelManagement.Data;
 
 namespace HotelManagement.Forms
@@ -126,16 +126,16 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     if (connection != null)
                     {
                         string query = "SELECT * FROM Room WHERE Room_Num = @Room_Num and Hotel_ID = @Hotel_ID";
-                        MySqlCommand command = new MySqlCommand(query, connection);
+                        SqlCommand command = new SqlCommand(query, connection);
                         command.Parameters.AddWithValue("@Room_Num", roomNum);
                         command.Parameters.AddWithValue("@Hotel_ID", hotelId);
 
-                        using (MySqlDataReader reader = command.ExecuteReader())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
@@ -170,7 +170,7 @@ namespace HotelManagement.Forms
             {
                 try
                 {
-                    using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                    using (SqlConnection connection = DatabaseConnection.GetConnection())
                     {
                         if (connection != null)
                         {
@@ -179,7 +179,7 @@ namespace HotelManagement.Forms
                                                WHERE Hotel_ID = @Hotel_ID 
                                                AND Room_Num = @Room_Num 
                                                AND Room_ID != @Room_ID";
-                            MySqlCommand checkCommand = new MySqlCommand(checkQuery, connection);
+                            SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
                             var selectedHotel = (ComboBoxItem)hotelComboBox.SelectedItem;
                             checkCommand.Parameters.AddWithValue("@Hotel_ID", selectedHotel.Id);
                             checkCommand.Parameters.AddWithValue("@Room_Num", roomNumTextBox.Text);
@@ -199,7 +199,7 @@ namespace HotelManagement.Forms
                                                Status = @Status
                                            WHERE Room_Num = @Room_Num and Hotel_ID = @Hotel_ID";
 
-                            MySqlCommand command = new MySqlCommand(query, connection);
+                            SqlCommand command = new SqlCommand(query, connection);
                             command.Parameters.AddWithValue("@Room_Num", roomNum);
                             command.Parameters.AddWithValue("@Hotel_ID", selectedHotel.Id);
                             //command.Parameters.AddWithValue("@Room_Num", roomNumTextBox.Text);

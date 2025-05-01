@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -26,7 +26,7 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection conn = DatabaseConnection.GetConnection())
+                using (SqlConnection conn = DatabaseConnection.GetConnection())
                 {
                     //Amount due from services
                     int servicesCost=0;
@@ -35,7 +35,7 @@ namespace HotelManagement.Forms
                                     join Service s on res.Service_ID = s.Service_ID
                                     where res.Reservation_ID = @Reservation_ID
                                     ";
-                    MySqlCommand cmd1 = new MySqlCommand(query1, conn);
+                    SqlCommand cmd1 = new SqlCommand(query1, conn);
                     cmd1.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
                     var res1 = cmd1.ExecuteScalar();
                     if (res1 != DBNull.Value)
@@ -48,7 +48,7 @@ namespace HotelManagement.Forms
                                       from Reservation
                                       where Reservation_ID = @Reservation_ID
                                     ";
-                    MySqlCommand cmd2 = new MySqlCommand(query2, conn);
+                    SqlCommand cmd2 = new SqlCommand(query2, conn);
                     cmd2.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
                     var res2 = cmd2.ExecuteScalar();
                     if (res2 != DBNull.Value)
@@ -63,7 +63,7 @@ namespace HotelManagement.Forms
                                       join Room_Category c on res.Hotel_ID = c.Hotel_ID and r.Category = c.Category
                                       where res.Reservation_ID = @Reservation_ID
                                     ";
-                    MySqlCommand cmd3 = new MySqlCommand(query3, conn);
+                    SqlCommand cmd3 = new SqlCommand(query3, conn);
                     cmd3.Parameters.AddWithValue("@Nights", nights);
                     cmd3.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
                     var res3 = cmd3.ExecuteScalar();
@@ -80,7 +80,7 @@ namespace HotelManagement.Forms
                                       from Payment
                                       where Reservation_ID = @Reservation_ID
                                     ";
-                    MySqlCommand cmd4 = new MySqlCommand(query4, conn);
+                    SqlCommand cmd4 = new SqlCommand(query4, conn);
                     cmd4.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
                     var res4 = cmd4.ExecuteScalar();
                     if (res4 != DBNull.Value)
@@ -99,15 +99,15 @@ namespace HotelManagement.Forms
         }
         private void LoadPayments()
         {
-            using (MySqlConnection conn = DatabaseConnection.GetConnection())
+            using (SqlConnection conn = DatabaseConnection.GetConnection())
             {
                 string query = @"Select *
                                  from Payment
                                  where Reservation_ID = @Reservation_ID
                                 ";
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
                 ReservationPaymentsGrid.DataSource = dataTable;
@@ -153,12 +153,12 @@ namespace HotelManagement.Forms
                 {
                     DataGridViewRow selectedRow = ReservationPaymentsGrid.SelectedRows[0];
                     int PaymentID = Convert.ToInt32(selectedRow.Cells["Payment_ID"].Value);
-                    using (MySqlConnection con = DatabaseConnection.GetConnection())
+                    using (SqlConnection con = DatabaseConnection.GetConnection())
                     {
                         string query = @"Delete from Payment
                                          where Payment_ID = @Payment_ID
                                         ";
-                        MySqlCommand cmd = new MySqlCommand(query, con);
+                        SqlCommand cmd = new SqlCommand(query, con);
                         cmd.Parameters.AddWithValue("@Payment_ID", PaymentID);
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Deleted");

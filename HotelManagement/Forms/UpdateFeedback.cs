@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -31,13 +31,13 @@ namespace HotelManagement.Forms
             {
                 RatingComboBox.Items.Add(i);
             }
-            using (MySqlConnection con = DatabaseConnection.GetConnection()) {
+            using (SqlConnection con = DatabaseConnection.GetConnection()) {
                 string query = @"Select * from Feedback
                                  where Feedback_ID = @Feedback_ID
                                 ";
-                MySqlCommand cmd = new MySqlCommand(query, con);
+                SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@Feedback_ID", this.FeedbackID);
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
@@ -51,15 +51,15 @@ namespace HotelManagement.Forms
         }
         private void LoadGuests()
         {
-            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 if (connection != null)
                 {
                     //connection.Open();
                     string query = "SELECT Guest_ID, Name FROM Guest";
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         dt.Columns.Add("DisplayText", typeof(string));
@@ -77,15 +77,15 @@ namespace HotelManagement.Forms
 
         private void LoadHotels()
         {
-            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 if (connection != null)
                 {
                     //connection.Open();
                     string query = "SELECT Hotel_ID, Name FROM Hotel";
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         HotelComboBox.DataSource = dt;
@@ -113,13 +113,13 @@ namespace HotelManagement.Forms
                 int HotelID = Convert.ToInt32(HotelComboBox.SelectedValue);
                 int GuestID = Convert.ToInt32(GuestComboBox.SelectedValue);
                 int Rating = Convert.ToInt32(RatingComboBox.SelectedItem);
-                using (MySqlConnection con = DatabaseConnection.GetConnection())
+                using (SqlConnection con = DatabaseConnection.GetConnection())
                 {
                     string query = @"Update Feedback
                                     set Guest_ID = @Guest_ID, Hotel_ID = @Hotel_ID, Rating = @Rating, Comments = @Comments
                                     where Feedback_ID = @FeedbackID;
                                     ";
-                    MySqlCommand cmd = new MySqlCommand(@query, con);
+                    SqlCommand cmd = new SqlCommand(@query, con);
                     cmd.Parameters.AddWithValue("@Guest_ID", GuestID);
                     cmd.Parameters.AddWithValue("@Hotel_ID", HotelID);
                     cmd.Parameters.AddWithValue("@Rating", Rating);

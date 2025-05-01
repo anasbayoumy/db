@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -23,12 +23,12 @@ namespace HotelManagement.Forms
 
         private void LoadData()
         {
-            using (MySqlConnection con = DatabaseConnection.GetConnection())
+            using (SqlConnection con = DatabaseConnection.GetConnection())
             {
                 string query = @"Select Hotel_ID, Name
                                  from Hotel
                                 ";
-                MySqlDataAdapter adapter = new MySqlDataAdapter(query, con);
+                SqlDataAdapter adapter = new SqlDataAdapter(query, con);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
                 dataTable.Columns.Add("DisplayText", typeof(string));
@@ -54,13 +54,13 @@ namespace HotelManagement.Forms
                 MessageBox.Show("Please enter a valid positive number for the amount.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            using (MySqlConnection con = DatabaseConnection.GetConnection()) {
+            using (SqlConnection con = DatabaseConnection.GetConnection()) {
                 try
                 {
                     string query = @"Insert into Room_Category(Hotel_ID, Category, Price)
                                  values(@Hotel_ID, @Category, @Price)
                                 ";
-                    MySqlCommand cmd= new MySqlCommand(query, con);
+                    SqlCommand cmd= new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@Hotel_ID", HotelComboBox.SelectedValue);
                     cmd.Parameters.AddWithValue("@Category", NameTextBox.Text);
                     cmd.Parameters.AddWithValue("@Price", Price);

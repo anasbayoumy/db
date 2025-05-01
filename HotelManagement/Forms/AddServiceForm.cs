@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -24,16 +24,16 @@ namespace HotelManagement.Forms
         
         private void loadServices()
         {
-            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 String query = @"SELECT s.Service_ID, s.Service_Name, s.Cost
                                  FROM Service s
                                  where s.Service_ID NOT in (Select Service_ID from Reservation_Service 
                                                             where Reservation_ID = @Reservation_ID)
                                 ";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
+                SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 dt.Columns.Add("DisplayText", typeof(string));
@@ -55,14 +55,14 @@ namespace HotelManagement.Forms
 
         private void addService_Click(object sender, EventArgs e)
         {
-            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 try
                 {
                     String insert = @"Insert into Reservation_Service (Reservation_ID, Service_ID, Quantity)
                              Values(@Reservation_ID, @Service_ID, @Quantity)
                             ";
-                    MySqlCommand cmd = new MySqlCommand(insert, connection);
+                    SqlCommand cmd = new SqlCommand(insert, connection);
                     cmd.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
                     cmd.Parameters.AddWithValue("@Service_ID", ServiceOptions.SelectedValue);
                     cmd.Parameters.AddWithValue("@Quantity", quantityCounter.Value);

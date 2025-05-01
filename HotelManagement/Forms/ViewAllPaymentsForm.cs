@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -21,11 +21,11 @@ namespace HotelManagement.Forms
         }
         private void LoadData()
         {
-            using (MySqlConnection con = DatabaseConnection.GetConnection())
+            using (SqlConnection con = DatabaseConnection.GetConnection())
             {
                 string query = @"Select * from Payment";
-                MySqlCommand cmd = new MySqlCommand(query, con);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
                 PaymentsGrid.DataSource = dataTable;
@@ -37,12 +37,12 @@ namespace HotelManagement.Forms
             {
                 DataGridViewRow selected = PaymentsGrid.SelectedRows[0];
                 int paymentID = Convert.ToInt32(selected.Cells["Payment_ID"].Value);
-                using (MySqlConnection con = DatabaseConnection.GetConnection())
+                using (SqlConnection con = DatabaseConnection.GetConnection())
                 {
                     string query = @"Delete from Payment
                                      Where Payment_ID = @Payment_ID
                                     ";
-                    MySqlCommand cmd = new MySqlCommand(query, con);
+                    SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@Payment_ID", paymentID);
                     try
                     {

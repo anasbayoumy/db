@@ -4,7 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -76,15 +76,15 @@ namespace HotelManagement.Forms
 
         private void LoadGuests()
         {
-            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 if (connection != null)
                 {
                     //connection.Open();
                     string query = "SELECT Guest_ID, Name FROM Guest";
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         dt.Columns.Add("DisplayText", typeof(string));
@@ -102,15 +102,15 @@ namespace HotelManagement.Forms
 
         private void LoadHotels()
         {
-            using (MySqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 if (connection != null)
                 {
                     //connection.Open();
                     string query = "SELECT Hotel_ID, Name FROM Hotel";
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         hotelComboBox.DataSource = dt;
@@ -131,16 +131,16 @@ namespace HotelManagement.Forms
             if (hotelComboBox.SelectedValue is int hotelId)
             {
                 roomsListBox.Items.Clear();
-                using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     if (connection != null)
                     {
                         //connection.Open();
                         string query = @"SELECT Room_Num FROM Room WHERE Hotel_ID = @HotelID AND Status = 'Available'";
-                        using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                        using (SqlCommand cmd = new SqlCommand(query, connection))
                         {
                             cmd.Parameters.AddWithValue("@HotelID", hotelId);
-                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            using (SqlDataReader reader = cmd.ExecuteReader())
                             {
                                 while (reader.Read())
                                 {

@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using HotelManagement.Data;
 
 namespace HotelManagement.Forms
@@ -90,15 +90,15 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     if (connection != null)
                     {
                         string query = "SELECT * FROM Guest WHERE Guest_ID = @Guest_ID";
-                        MySqlCommand command = new MySqlCommand(query, connection);
+                        SqlCommand command = new SqlCommand(query, connection);
                         command.Parameters.AddWithValue("@Guest_ID", guestId);
 
-                        using (MySqlDataReader reader = command.ExecuteReader())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
@@ -126,7 +126,7 @@ namespace HotelManagement.Forms
             {
                 try
                 {
-                    using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                    using (SqlConnection connection = DatabaseConnection.GetConnection())
                     {
                         if (connection != null)
                         {
@@ -140,7 +140,7 @@ namespace HotelManagement.Forms
                                                Email = @Email 
                                            WHERE Guest_ID = @Guest_ID";
 
-                            MySqlCommand command = new MySqlCommand(query, connection);
+                            SqlCommand command = new SqlCommand(query, connection);
                             command.Parameters.AddWithValue("@Guest_ID", guestId);
                             command.Parameters.AddWithValue("@Name", nameTextBox.Text);
                             command.Parameters.AddWithValue("@Nationality", nationalityTextBox.Text);

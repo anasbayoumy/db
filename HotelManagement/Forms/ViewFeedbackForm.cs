@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -23,15 +23,15 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection con = DatabaseConnection.GetConnection())
+                using (SqlConnection con = DatabaseConnection.GetConnection())
                 {
                     string query = @"Select f.Feedback_ID, g.Name as Guest_Name, h.Name as Hotel_Name, f.Rating, f.Comments, f.Feedback_Date 
                                      from Feedback f
                                      join Guest g on f.Guest_ID = g.Guest_ID
                                      join Hotel h on f.Hotel_ID = h.Hotel_ID
                                      ";
-                    MySqlCommand cmd = new MySqlCommand(query, con);
-                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     FeedbackGrid.DataSource = dt;
@@ -69,12 +69,12 @@ namespace HotelManagement.Forms
                 {
                     DataGridViewRow selected= FeedbackGrid.SelectedRows[0];
                     int feedbackID = Convert.ToInt32(selected.Cells["Feedback_ID"].Value);
-                    using(MySqlConnection connection = DatabaseConnection.GetConnection())
+                    using(SqlConnection connection = DatabaseConnection.GetConnection())
                     {
                         string query = @"Delete from Feedback
                                          where Feedback_ID = @FeedbackID
                                         ";
-                        MySqlCommand cmd = new MySqlCommand(query, connection);
+                        SqlCommand cmd = new SqlCommand(query, connection);
                         cmd.Parameters.AddWithValue("@FeedbackID", feedbackID);
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Deleted");

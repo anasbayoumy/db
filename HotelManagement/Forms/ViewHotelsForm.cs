@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -23,7 +23,7 @@ namespace HotelManagement.Forms
 
         private void updateRating()
         {
-            using (MySqlConnection conn = DatabaseConnection.GetConnection())
+            using (SqlConnection conn = DatabaseConnection.GetConnection())
             {
                 string query = @"Update Hotel h
                                  Left Join(Select Hotel_ID, AVG(Rating) as avg
@@ -33,18 +33,18 @@ namespace HotelManagement.Forms
                                  on h.Hotel_ID = avgRatings.Hotel_ID
                                  set h.Rating = IFNULL(avgRatings.avg,0)
                                 ";
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.ExecuteNonQuery();
             }
         }
 
         private void LoadData()
         {
-            using (MySqlConnection con = DatabaseConnection.GetConnection())
+            using (SqlConnection con = DatabaseConnection.GetConnection())
             {
                 string query = "Select * from Hotel";
-                MySqlCommand cmd = new MySqlCommand(query, con);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 HotelsGrid.DataSource = dt;
@@ -85,12 +85,12 @@ namespace HotelManagement.Forms
                 int Hotel_ID = Convert.ToInt32(selected.Cells["Hotel_ID"].Value);
                 try
                 {
-                    using (MySqlConnection con = DatabaseConnection.GetConnection())
+                    using (SqlConnection con = DatabaseConnection.GetConnection())
                     {
                         string query = @"Delete From Hotel
                                      Where Hotel_ID = @Hotel_ID 
                                     ";
-                        MySqlCommand cmd = new MySqlCommand(query, con);
+                        SqlCommand cmd = new SqlCommand(query, con);
                         cmd.Parameters.AddWithValue("@Hotel_ID", Hotel_ID);
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Deleted");

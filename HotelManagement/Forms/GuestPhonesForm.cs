@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -24,15 +24,15 @@ namespace HotelManagement.Forms
 
         private void LoadPhones()
         {
-            using (MySqlConnection conn = DatabaseConnection.GetConnection())
+            using (SqlConnection conn = DatabaseConnection.GetConnection())
             {
                 string query = @"Select Phone_number 
                                  From Guest_Phone_nums
                                  Where Guest_ID = @Guest_ID
                                 ";
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Guest_ID", this.guestID);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
                 GuestPhonesGrid.DataSource = dataTable;
@@ -57,12 +57,12 @@ namespace HotelManagement.Forms
                 string PhoneNum = selectedRow.Cells["Phone_number"].Value.ToString();
                 try
                 {
-                    using (MySqlConnection conn = DatabaseConnection.GetConnection())
+                    using (SqlConnection conn = DatabaseConnection.GetConnection())
                     {
                         string query = @"Delete from Guest_Phone_nums
                                          Where Phone_number = @Phone
                                         ";
-                        MySqlCommand cmd = new MySqlCommand(query, conn);
+                        SqlCommand cmd = new SqlCommand(query, conn);
                         cmd.Parameters.AddWithValue("@Phone", PhoneNum);
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Done");

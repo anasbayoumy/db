@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using HotelManagement.Data;
 
 namespace HotelManagement.Forms
@@ -70,8 +70,8 @@ namespace HotelManagement.Forms
         {
             using var connection = DatabaseConnection.GetConnection();
             string query = "SELECT Guest_ID, Name FROM Guest";
-            using var cmd = new MySqlCommand(query, connection);
-            var adapter = new MySqlDataAdapter(cmd);
+            using var cmd = new SqlCommand(query, connection);
+            var adapter = new SqlDataAdapter(cmd);
             var dt = new DataTable();
             adapter.Fill(dt);
             dt.Columns.Add("DisplayText", typeof(string));
@@ -86,8 +86,8 @@ namespace HotelManagement.Forms
         {
             using var connection = DatabaseConnection.GetConnection();
             string query = "SELECT Hotel_ID, Name FROM Hotel";
-            using var cmd = new MySqlCommand(query, connection);
-            var adapter = new MySqlDataAdapter(cmd);
+            using var cmd = new SqlCommand(query, connection);
+            var adapter = new SqlDataAdapter(cmd);
             var dt = new DataTable();
             adapter.Fill(dt);
             dt.Columns.Add("DisplayText", typeof(string));
@@ -108,10 +108,10 @@ namespace HotelManagement.Forms
                 LEFT JOIN Reservation_Rooms rr ON r.Reservation_ID = rr.Reservation_ID
                 WHERE r.Reservation_ID = @ReservationID";
 
-            using var cmd = new MySqlCommand(query, connection);
+            using var cmd = new SqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@ReservationID", reservationId);
 
-            using var adapter = new MySqlDataAdapter(cmd);
+            using var adapter = new SqlDataAdapter(cmd);
             var dt = new DataTable();
             adapter.Fill(dt);
 
@@ -150,7 +150,7 @@ namespace HotelManagement.Forms
                 roomsListBox.Items.Clear();
                 using var connection = DatabaseConnection.GetConnection();
                 string query = "SELECT Room_Num FROM Room WHERE Hotel_ID = @HotelID";
-                using var cmd = new MySqlCommand(query, connection);
+                using var cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@HotelID", hotelId);
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -196,7 +196,7 @@ namespace HotelManagement.Forms
                   AND r.Status IN ('Pending', 'Confirmed')
                   AND NOT (r.Check_out_Date <= @CheckIn OR r.Check_in_Date >= @CheckOut)";
 
-                    using var checkCmd = new MySqlCommand(checkQuery, connection);
+                    using var checkCmd = new SqlCommand(checkQuery, connection);
                     checkCmd.Parameters.AddWithValue("@HotelID", hotelId);
                     checkCmd.Parameters.AddWithValue("@RoomNum", roomNum);
                     checkCmd.Parameters.AddWithValue("@CurrentReservationID", reservationId);
@@ -219,7 +219,7 @@ namespace HotelManagement.Forms
                 Check_out_Date = @CheckOut
             WHERE Reservation_ID = @ReservationID";
 
-                using (var cmd = new MySqlCommand(updateQuery, connection))
+                using (var cmd = new SqlCommand(updateQuery, connection))
                 {
                     cmd.Parameters.AddWithValue("@GuestID", guestComboBox.SelectedValue);
                     cmd.Parameters.AddWithValue("@CheckIn", checkIn);
@@ -230,7 +230,7 @@ namespace HotelManagement.Forms
 
                 // Delete old room assignments
                 string deleteRoomsQuery = "DELETE FROM Reservation_Rooms WHERE Reservation_ID = @ReservationID";
-                using (var cmd = new MySqlCommand(deleteRoomsQuery, connection))
+                using (var cmd = new SqlCommand(deleteRoomsQuery, connection))
                 {
                     cmd.Parameters.AddWithValue("@ReservationID", reservationId);
                     cmd.ExecuteNonQuery();
@@ -242,7 +242,7 @@ namespace HotelManagement.Forms
                     string insertRoomQuery = @"
                 INSERT INTO Reservation_Rooms (Reservation_ID, Room_Num, Hotel_ID)
                 VALUES (@ReservationID, @RoomNum, @HotelID)";
-                    using (var cmd = new MySqlCommand(insertRoomQuery, connection))
+                    using (var cmd = new SqlCommand(insertRoomQuery, connection))
                     {
                         cmd.Parameters.AddWithValue("@ReservationID", reservationId);
                         cmd.Parameters.AddWithValue("@RoomNum", room.ToString());

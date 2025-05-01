@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace HotelManagement.Forms
 {
@@ -26,13 +26,13 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection con = DatabaseConnection.GetConnection()) {
+                using (SqlConnection con = DatabaseConnection.GetConnection()) {
                     string query = @"Select * from Service
                                      Where Service_ID = @ServiceID
                                     ";
-                    MySqlCommand cmd = new MySqlCommand(query, con);
+                    SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@ServiceID", this.ServiceID);
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -73,13 +73,13 @@ namespace HotelManagement.Forms
             }
             try
             {
-                using (MySqlConnection con = DatabaseConnection.GetConnection())
+                using (SqlConnection con = DatabaseConnection.GetConnection())
                 {
                     string query = @"Update Service
                                      set Service_Name = @Name, Description = @Description, Cost = @Cost
                                      Where Service_ID = @Service_ID;
                                     ";
-                    MySqlCommand cmd = new MySqlCommand(query, con);
+                    SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@Name", NameTextBox.Text);
                     cmd.Parameters.AddWithValue("@Description", DescriptionTextBox.Text);
                     cmd.Parameters.AddWithValue("@Cost", price);

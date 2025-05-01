@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using HotelManagement.Data;
 
 namespace HotelManagement.Forms
@@ -106,13 +106,13 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     if (connection != null)
                     {
                         string query = "SELECT Hotel_ID, Name FROM Hotel";
-                        MySqlCommand command = new MySqlCommand(query, connection);
-                        using (MySqlDataReader reader = command.ExecuteReader())
+                        SqlCommand command = new SqlCommand(query, connection);
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             filterHotelComboBox.Items.Clear();
                             filterHotelComboBox.Items.Add(new ComboBoxItem { Id = 0, Text = "All Hotels" });
@@ -140,7 +140,7 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     if (connection != null)
                     {
@@ -156,7 +156,7 @@ namespace HotelManagement.Forms
                             query += " WHERE r.Hotel_ID = @Hotel_ID";
                         }
 
-                        MySqlCommand command = new MySqlCommand(query, connection);
+                        SqlCommand command = new SqlCommand(query, connection);
                         
                         if (filterHotelComboBox.SelectedIndex > 0)
                         {
@@ -164,7 +164,7 @@ namespace HotelManagement.Forms
                             command.Parameters.AddWithValue("@Hotel_ID", selectedHotel.Id);
                         }
 
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+                        SqlDataAdapter adapter = new SqlDataAdapter(command);
                         DataTable dataTable = new DataTable();
                         adapter.Fill(dataTable);
                         roomGridView.DataSource = dataTable;
@@ -219,13 +219,13 @@ namespace HotelManagement.Forms
                 {
                     try
                     {
-                        using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                        using (SqlConnection connection = DatabaseConnection.GetConnection())
                         {
                             if (connection != null)
                             {
                                 // First check if the room has any reservations
                                 string checkQuery = "SELECT COUNT(*) FROM Reservation WHERE Room_ID = @Room_ID";
-                                MySqlCommand checkCommand = new MySqlCommand(checkQuery, connection);
+                                SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
                                 checkCommand.Parameters.AddWithValue("@Room_ID", roomId);
                                 int reservationCount = Convert.ToInt32(checkCommand.ExecuteScalar());
 
@@ -237,7 +237,7 @@ namespace HotelManagement.Forms
                                 }
 
                                 string query = "DELETE FROM Room WHERE Room_ID = @Room_ID";
-                                MySqlCommand command = new MySqlCommand(query, connection);
+                                SqlCommand command = new SqlCommand(query, connection);
                                 command.Parameters.AddWithValue("@Room_ID", roomId);
                                 command.ExecuteNonQuery();
                                 LoadRoomData();
