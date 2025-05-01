@@ -44,7 +44,7 @@ namespace HotelManagement.Forms
                     }
                     //Get number of nights
                     int nights=0;
-                    string query2 = @"select DATEDIFF(Check_out_Date, Check_in_Date)
+                    string query2 = @"select DATEDIFF(DAY, Check_in_Date, Check_out_Date)
                                       from Reservation
                                       where Reservation_ID = @Reservation_ID
                                     ";
