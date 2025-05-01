@@ -89,6 +89,7 @@
             viewEmailsButton.TabIndex = 4;
             viewEmailsButton.Text = "View Emails";
             viewEmailsButton.UseVisualStyleBackColor = true;
+            viewEmailsButton.Click += viewEmailsButton_Click;
             // 
             // ViewHotelsForm
             // 

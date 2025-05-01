@@ -104,5 +104,21 @@ namespace HotelManagement.Forms
                 LoadData();
             }
         }
+
+        private void viewEmailsButton_Click(object sender, EventArgs e)
+        {
+            if (HotelsGrid.SelectedRows.Count == 1)
+            {
+                DataGridViewRow selected = HotelsGrid.SelectedRows[0];
+                int Hotel_ID = Convert.ToInt32(selected.Cells["Hotel_ID"].Value);
+                using (ViewHotelEmailsForm emails = new ViewHotelEmailsForm(Hotel_ID))
+                {
+                    emails.ShowDialog();
+                }
+                updateRating();
+                LoadData();
+            }
+
+        }
     }
 }
