@@ -73,12 +73,11 @@ namespace HotelManagement.Forms
                     {
                         using (SqlConnection connection = DatabaseConnection.GetConnection())
                         {
-                            //connection.Open();
 
                             // 1. Insert into Reservation
                             string reservationQuery = @"INSERT INTO Reservation (Guest_ID, Check_in_Date, Check_out_Date, Status) 
                                                 VALUES (@GuestID, @CheckIn, @CheckOut, 'Pending');
-                                                SELECT LAST_INSERT_ID();";
+                                                SELECT SCOPE_IDENTITY();";
 
                             SqlCommand reservationCmd = new SqlCommand(reservationQuery, connection);
                             reservationCmd.Parameters.AddWithValue("@GuestID", addForm.GuestId);
@@ -104,7 +103,7 @@ namespace HotelManagement.Forms
                                 string updateRoomStatus = @"UPDATE Room SET Status = 'Occupied' 
                                                     WHERE Hotel_ID = @HotelID AND Room_Num = @RoomNum;";
 
-                                MySqlCommand updateCmd = new MySqlCommand(updateRoomStatus, connection);
+                                SqlCommand updateCmd = new SqlCommand(updateRoomStatus, connection);
                                 updateCmd.Parameters.AddWithValue("@HotelID", addForm.HotelId);
                                 updateCmd.Parameters.AddWithValue("@RoomNum", roomNum);
 
