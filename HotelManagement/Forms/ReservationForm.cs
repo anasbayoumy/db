@@ -174,6 +174,7 @@ namespace HotelManagement.Forms
             updateReservation.TabIndex = 2;
             updateReservation.Text = "Update";
             updateReservation.UseVisualStyleBackColor = true;
+            updateReservation.Click += updateReservation_Click;
             // 
             // DeleteReservation
             // 
@@ -291,6 +292,11 @@ namespace HotelManagement.Forms
                 ReservationPaymentsForm payments = new ReservationPaymentsForm(reservationID);
                 payments.ShowDialog();
             }
+        }
+
+        private void updateReservation_Click(object sender, EventArgs e)
+        {
+
         }
     }
 } 

@@ -26,6 +26,9 @@
     <Compile Update="Forms\GuestPhonesForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\NewHotelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\ReservationPaymentsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -50,6 +53,9 @@
     <Compile Update="Forms\UpdateGuestForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\UpdateHotelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\UpdatePaymentForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -57,6 +63,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\UpdateServiceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ViewHotelsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\ViewRoomCategories.cs">
