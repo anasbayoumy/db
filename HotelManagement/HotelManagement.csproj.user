@@ -5,6 +5,9 @@
     <Compile Update="Forms\AddGuestForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\AddNewCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\AddPhoneForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -41,6 +44,9 @@
     <Compile Update="Forms\RoomForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\UpdateCategoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\UpdateGuestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -51,6 +57,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\UpdateServiceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ViewRoomCategories.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

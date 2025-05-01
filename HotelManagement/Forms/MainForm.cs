@@ -119,8 +119,8 @@ namespace HotelManagement.Forms
         }
         private void CategoryButton_Click(object sender, EventArgs e)
         {
-            ReservationForm reservationForm = new ReservationForm();
-            reservationForm.ShowDialog();
+            ViewRoomCategories CategoriesForm = new ViewRoomCategories();
+            CategoriesForm.ShowDialog();
         }
         private void HotelButton_Click(object sender, EventArgs e)
         {

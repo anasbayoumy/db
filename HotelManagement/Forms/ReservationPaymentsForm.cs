@@ -138,6 +138,10 @@ namespace HotelManagement.Forms
                 Amount.Text = loadAmountDue().ToString();
                 LoadPayments();
             }
+            else
+            {
+                MessageBox.Show("Please select one row");
+            }
         }
 
         private void DeletePayment_Click(object sender, EventArgs e)

@@ -78,3 +78,6 @@ C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-wind
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.ReservationPaymentsForm.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.AddResPaymentForm.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.UpdatePaymentForm.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.ViewRoomCategories.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.AddNewCategory.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.UpdateCategoryForm.resources
