@@ -289,14 +289,29 @@ namespace HotelManagement.Forms
             {
                 DataGridViewRow selectedRow = reservationGridView.SelectedRows[0];
                 int reservationID = Convert.ToInt32(selectedRow.Cells["Reservation_ID"].Value);
-                ReservationPaymentsForm payments = new ReservationPaymentsForm(reservationID);
-                payments.ShowDialog();
+                using (ReservationPaymentsForm payments = new ReservationPaymentsForm(reservationID))
+                {
+                    payments.ShowDialog();
+                }
+                LoadReservations();  
+                
             }
         }
 
         private void updateReservation_Click(object sender, EventArgs e)
         {
 
+            if (reservationGridView.SelectedRows.Count == 1)
+            {
+                DataGridViewRow selectedRow = reservationGridView.SelectedRows[0];
+                int reservationID = Convert.ToInt32(selectedRow.Cells["Reservation_ID"].Value);
+                using (UpdateReservationForm reservation = new UpdateReservationForm(reservationID))
+                {
+                    reservation.ShowDialog();
+                }
+                LoadReservations();
+
+            }
         }
     }
 } 

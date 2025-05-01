@@ -74,6 +74,9 @@
     <Compile Update="Forms\UpdatePaymentForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\UpdateReservationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\UpdateRoomForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -94,3 +94,4 @@ C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-wind
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.ViewFeedbackForm.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.AddFeedback.resources
 C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.UpdateFeedback.resources
+C:\Users\MohamedKhafagy\source\repos\db\db\HotelManagement\obj\Debug\net6.0-windows\HotelManagement.Forms.UpdateReservationForm.resources

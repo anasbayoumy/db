@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Ocsp;
 
 namespace HotelManagement.Forms
 {
@@ -45,6 +46,13 @@ namespace HotelManagement.Forms
                     cmd.Parameters.AddWithValue("@Amount", amount);
                     cmd.Parameters.AddWithValue("@Payment_Method", method);
                     cmd.ExecuteNonQuery();
+                    string query2 = @"Update Reservation
+                                    set Status = 'Confirmed'
+                                    where Reservation_ID = @Reservation_ID
+                                    ";
+                    MySqlCommand cmd2 = new MySqlCommand(query2, con);
+                    cmd2.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
+                    cmd2.ExecuteNonQuery();
                     MessageBox.Show("Added");
                     this.Close();
                 }
