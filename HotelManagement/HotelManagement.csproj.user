@@ -11,6 +11,9 @@
     <Compile Update="Forms\AddNewCategory.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\AddNewService.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\AddPhoneForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,7 +68,13 @@
     <Compile Update="Forms\UpdateRoomForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\UpdateServiceDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\UpdateServiceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ViewAllservicesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\ViewHotelEmailsForm.cs">
