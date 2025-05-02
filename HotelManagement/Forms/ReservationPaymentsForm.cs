@@ -110,16 +110,19 @@ namespace HotelManagement.Forms
         {
             using (SqlConnection conn = DatabaseConnection.GetConnection())
             {
-                string query = @"Select *
-                                 from Payment
-                                 where Reservation_ID = @Reservation_ID
-                                ";
+                /* string query = @"Select *
+                                  from Payment
+                                  where Reservation_ID = @Reservation_ID
+                                 ";*/
+                string query = @"ListPaymentsForReservationProc";
                 SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
                 ReservationPaymentsGrid.DataSource = dataTable;
+                ReservationPaymentsGrid.Columns["Reservation_ID"].Visible = false;
             }
 
         }
