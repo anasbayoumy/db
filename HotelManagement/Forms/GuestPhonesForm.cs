@@ -26,9 +26,12 @@ namespace HotelManagement.Forms
         {
             using (SqlConnection conn = DatabaseConnection.GetConnection())
             {
-                string query = @"Select Phone_number 
+                /*string query = @"Select Phone_number 
                                  From Guest_Phone_nums
                                  Where Guest_ID = @Guest_ID
+                                ";*/
+                string query = @"SELECT Phone_number
+                                FROM ListGuestPhoneNumbers(@Guest_ID)
                                 ";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Guest_ID", this.guestID);
