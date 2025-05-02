@@ -160,7 +160,7 @@ namespace HotelManagement.Forms
         {
             if (ReservationPaymentsGrid.SelectedRows.Count == 1)
             {
-                if (MessageBox.Show("Are you sure you want to delete this reservation?", "Confirm Delete",
+                if (MessageBox.Show("Are you sure you want to delete this Payment?", "Confirm Delete",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     DataGridViewRow selectedRow = ReservationPaymentsGrid.SelectedRows[0];

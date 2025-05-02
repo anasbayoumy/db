@@ -1,5 +1,8 @@
 using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.Windows.Forms;
+using HotelManagement.Data;
 
 namespace HotelManagement.Forms
 {
@@ -88,6 +91,14 @@ namespace HotelManagement.Forms
             };
             feedbackButton.Click += FeedbackButton_Click;
 
+            Button RaisePricesButton = new Button
+            {
+                Text = "Raise all prices",
+                Location = new System.Drawing.Point(50, 450),
+                Size = new System.Drawing.Size(300, 40)
+            };
+            RaisePricesButton.Click += RaisePricesButton_Click;
+
             // Add controls to form
             //this.Controls.Add(menuStrip);
             this.Controls.Add(guestButton);
@@ -98,6 +109,7 @@ namespace HotelManagement.Forms
             this.Controls.Add(servicesButton);
             this.Controls.Add(paymentButton);
             this.Controls.Add(feedbackButton);
+            this.Controls.Add(RaisePricesButton);
         }
 
         private void GuestButton_Click(object sender, EventArgs e)
@@ -141,6 +153,17 @@ namespace HotelManagement.Forms
         {
             ViewFeedbackForm feedbackForm = new ViewFeedbackForm();
             feedbackForm.ShowDialog();
+        }
+        private void RaisePricesButton_Click(object sender, EventArgs e)
+        {
+            using(SqlConnection con = DatabaseConnection.GetConnection())
+            {
+                string query = @"Raise_All_Prices_By_10_Percent";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Prices have been increased by 10%.", "Success");
+            }
         }
     }
 } 
