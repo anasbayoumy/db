@@ -23,16 +23,21 @@ namespace HotelManagement.Forms
         {
             methodComboBox.Items.AddRange(new string[] { "Cash", "Credit Card", "Online Transfer" });
             methodComboBox.SelectedIndex = 0;
-            using (SqlConnection con = DatabaseConnection.GetConnection()) {
-                string query = "Select Reservation_ID from Reservation";
-                SqlCommand cmd = new SqlCommand(query, con);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                ReservationComboBox.DataSource = dt;
-                ReservationComboBox.DisplayMember = "Reservation_ID";
-                ReservationComboBox.ValueMember = "Reservation_ID";
+            try
+            {
+                using (SqlConnection con = DatabaseConnection.GetConnection())
+                {
+                    string query = "Select Reservation_ID from Reservation";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    ReservationComboBox.DataSource = dt;
+                    ReservationComboBox.DisplayMember = "Reservation_ID";
+                    ReservationComboBox.ValueMember = "Reservation_ID";
+                }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
             ReservationComboBox.SelectedIndex = 0;
         }
 

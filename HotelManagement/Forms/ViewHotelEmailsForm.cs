@@ -24,18 +24,22 @@ namespace HotelManagement.Forms
 
         private void LoadEmails()
         {
-            using (SqlConnection con = DatabaseConnection.GetConnection())
+            try
             {
-                string query = @"Select * from Hotel_emails
+                using (SqlConnection con = DatabaseConnection.GetConnection())
+                {
+                    string query = @"Select * from Hotel_emails
                                  where Hotel_ID = @HotelID
                                 ";
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@HotelID", this.HotelID);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                EmailsGrid.DataSource = dt;
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@HotelID", this.HotelID);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    EmailsGrid.DataSource = dt;
+                }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -50,17 +54,22 @@ namespace HotelManagement.Forms
             {
                 DataGridViewRow selected = EmailsGrid.SelectedRows[0];
                 string email = selected.Cells["Email"].Value.ToString();
-                using (SqlConnection con = DatabaseConnection.GetConnection()) {
-                    string query = @"Delete from Hotel_emails
+                try
+                {
+                    using (SqlConnection con = DatabaseConnection.GetConnection())
+                    {
+                        string query = @"Delete from Hotel_emails
                                      where Hotel_ID = @Hotel_ID  and Email = @Email  
                                     ";
-                    SqlCommand cmd = new SqlCommand( query, con);
-                    cmd.Parameters.AddWithValue("@Hotel_ID", this.HotelID);
-                    cmd.Parameters.AddWithValue("@Email", email);
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Deleted");
-                    LoadEmails();
+                        SqlCommand cmd = new SqlCommand(query, con);
+                        cmd.Parameters.AddWithValue("@Hotel_ID", this.HotelID);
+                        cmd.Parameters.AddWithValue("@Email", email);
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Deleted");
+                        LoadEmails();
+                    }
                 }
+                catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
 
             }
         }

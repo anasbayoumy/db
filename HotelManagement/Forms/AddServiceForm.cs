@@ -21,31 +21,34 @@ namespace HotelManagement.Forms
             InitializeComponent();
             loadServices();
         }
-        
+
         private void loadServices()
         {
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
-            {
-                String query = @"SELECT s.Service_ID, s.Service_Name, s.Cost
+            try {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    String query = @"SELECT s.Service_ID, s.Service_Name, s.Cost
                                  FROM Service s
                                  where s.Service_ID NOT in (Select Service_ID from Reservation_Service 
                                                             where Reservation_ID = @Reservation_ID)
                                 ";
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                dt.Columns.Add("DisplayText", typeof(string));
-                foreach (DataRow row in dt.Rows)
-                {
-                    row["DisplayText"] = $"{row["Service_Name"]} - ${row["Cost"]}";
+                    SqlCommand cmd = new SqlCommand(query, connection);
+                    cmd.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    dt.Columns.Add("DisplayText", typeof(string));
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        row["DisplayText"] = $"{row["Service_Name"]} - ${row["Cost"]}";
+                    }
+                    ServiceOptions.DisplayMember = "DisplayText";
+                    ServiceOptions.ValueMember = "Service_ID";
+                    ServiceOptions.DataSource = dt;
                 }
-                ServiceOptions.DisplayMember = "DisplayText";
-                ServiceOptions.ValueMember = "Service_ID";
-                ServiceOptions.DataSource = dt;
-            }
 
+            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void label1_Click(object sender, EventArgs e)

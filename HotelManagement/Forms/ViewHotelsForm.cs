@@ -23,37 +23,45 @@ namespace HotelManagement.Forms
 
         private void updateRating()
         {
-            using (SqlConnection conn = DatabaseConnection.GetConnection())
+            try
             {
+                using (SqlConnection conn = DatabaseConnection.GetConnection())
+                {
 
-                /* string query = @"
-                                 UPDATE h
-                                 SET h.Rating = ISNULL(avgRatings.avg, 0)
-                                 FROM Hotel h
-                                 LEFT JOIN (
-                                     SELECT Hotel_ID, AVG(CAST(Rating AS DECIMAL(3,1))) AS avg
-                                     FROM Feedback
-                                     GROUP BY Hotel_ID
-                                 ) AS avgRatings ON h.Hotel_ID = avgRatings.Hotel_ID;
-                                 ";*/
-                string query = @"Update_Hotel_Ratings";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.ExecuteNonQuery();
+                    /* string query = @"
+                                     UPDATE h
+                                     SET h.Rating = ISNULL(avgRatings.avg, 0)
+                                     FROM Hotel h
+                                     LEFT JOIN (
+                                         SELECT Hotel_ID, AVG(CAST(Rating AS DECIMAL(3,1))) AS avg
+                                         FROM Feedback
+                                         GROUP BY Hotel_ID
+                                     ) AS avgRatings ON h.Hotel_ID = avgRatings.Hotel_ID;
+                                     ";*/
+                    string query = @"Update_Hotel_Ratings";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.ExecuteNonQuery();
+                }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void LoadData()
         {
-            using (SqlConnection con = DatabaseConnection.GetConnection())
+            try
             {
-                string query = "Select * from Hotel";
-                SqlCommand cmd = new SqlCommand(query, con);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                HotelsGrid.DataSource = dt;
+                using (SqlConnection con = DatabaseConnection.GetConnection())
+                {
+                    string query = "Select * from Hotel";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    HotelsGrid.DataSource = dt;
+                }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void AddButton_Click(object sender, EventArgs e)

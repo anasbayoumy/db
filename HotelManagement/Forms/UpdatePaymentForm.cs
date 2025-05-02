@@ -26,24 +26,28 @@ namespace HotelManagement.Forms
 
         private void loadData()
         {
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                if (connection != null)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    string query = "SELECT * FROM Payment WHERE Payment_ID = @Payment_ID";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@Payment_ID", this.PaymentID);
-
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    if (connection != null)
                     {
-                        if (reader.Read())
+                        string query = "SELECT * FROM Payment WHERE Payment_ID = @Payment_ID";
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@Payment_ID", this.PaymentID);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            AmountTextBox.Text = reader["Amount"].ToString();
-                            methodComboBox.SelectedItem = reader["Payment_Method"].ToString();
+                            if (reader.Read())
+                            {
+                                AmountTextBox.Text = reader["Amount"].ToString();
+                                methodComboBox.SelectedItem = reader["Payment_Method"].ToString();
+                            }
                         }
                     }
                 }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
 
         }
 
@@ -60,20 +64,23 @@ namespace HotelManagement.Forms
                 return;
             }
             String method = methodComboBox.SelectedItem as string;
-            using (SqlConnection conn = DatabaseConnection.GetConnection())
-            {
-                string query = @"Update Payment
+            try {
+                using (SqlConnection conn = DatabaseConnection.GetConnection())
+                {
+                    string query = @"Update Payment
                                 set Amount = @Amount, Payment_Method = @Payment_Method
                                 where Payment_ID = @Payment_ID
                                 ";
-                SqlCommand command = new SqlCommand( query, conn);
-                command.Parameters.AddWithValue("@Amount", amount);
-                command.Parameters.AddWithValue("@Payment_Method", method);
-                command.Parameters.AddWithValue("@Payment_ID", this.PaymentID);
-                command.ExecuteNonQuery();
-                MessageBox.Show("Updated");
-                this.Close();
+                    SqlCommand command = new SqlCommand(query, conn);
+                    command.Parameters.AddWithValue("@Amount", amount);
+                    command.Parameters.AddWithValue("@Payment_Method", method);
+                    command.Parameters.AddWithValue("@Payment_ID", this.PaymentID);
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("Updated");
+                    this.Close();
+                }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
     }
 }

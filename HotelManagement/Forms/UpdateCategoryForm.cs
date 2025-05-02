@@ -27,38 +27,42 @@ namespace HotelManagement.Forms
         }
         private void LoadData()
         {
-            using (SqlConnection con = DatabaseConnection.GetConnection())
+            try
             {
-                string query = @"Select Hotel_ID, Name
+                using (SqlConnection con = DatabaseConnection.GetConnection())
+                {
+                    string query = @"Select Hotel_ID, Name
                                  from Hotel
                                 ";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, con);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
-                dataTable.Columns.Add("DisplayText", typeof(string));
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
-                }
-                HotelComboBox.DataSource = dataTable;
-                HotelComboBox.DisplayMember = "DisplayText";
-                HotelComboBox.ValueMember = "Hotel_ID";
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, con);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+                    dataTable.Columns.Add("DisplayText", typeof(string));
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
+                    }
+                    HotelComboBox.DataSource = dataTable;
+                    HotelComboBox.DisplayMember = "DisplayText";
+                    HotelComboBox.ValueMember = "Hotel_ID";
 
-                string query2 = @"Select Price
+                    string query2 = @"Select Price
                                   from Room_Category
                                   where Hotel_ID = @Hotel_ID and Category = @Category
                                 ";
-                SqlCommand command = new SqlCommand(query2, con);
-                command.Parameters.AddWithValue("@Hotel_ID", this.Hotel_ID);
-                command.Parameters.AddWithValue("@Category", this.catName);
-                var result = command.ExecuteScalar();
-                decimal price=0;
-                if (result != DBNull.Value)
-                {
-                    price = Convert.ToDecimal(result);
+                    SqlCommand command = new SqlCommand(query2, con);
+                    command.Parameters.AddWithValue("@Hotel_ID", this.Hotel_ID);
+                    command.Parameters.AddWithValue("@Category", this.catName);
+                    var result = command.ExecuteScalar();
+                    decimal price = 0;
+                    if (result != DBNull.Value)
+                    {
+                        price = Convert.ToDecimal(result);
+                    }
+                    PriceTextBox.Text = price.ToString();
                 }
-                PriceTextBox.Text = price.ToString();
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void UpdateButton_Click(object sender, EventArgs e)

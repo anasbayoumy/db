@@ -108,22 +108,26 @@ namespace HotelManagement.Forms
         }
         private void LoadPayments()
         {
-            using (SqlConnection conn = DatabaseConnection.GetConnection())
+            try
             {
-                /* string query = @"Select *
-                                  from Payment
-                                  where Reservation_ID = @Reservation_ID
-                                 ";*/
-                string query = @"ListPaymentsForReservationProc";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
-                ReservationPaymentsGrid.DataSource = dataTable;
-                ReservationPaymentsGrid.Columns["Reservation_ID"].Visible = false;
+                using (SqlConnection conn = DatabaseConnection.GetConnection())
+                {
+                    /* string query = @"Select *
+                                      from Payment
+                                      where Reservation_ID = @Reservation_ID
+                                     ";*/
+                    string query = @"ListPaymentsForReservationProc";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+                    ReservationPaymentsGrid.DataSource = dataTable;
+                    ReservationPaymentsGrid.Columns["Reservation_ID"].Visible = false;
+                }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
 
         }
 
@@ -165,18 +169,22 @@ namespace HotelManagement.Forms
                 {
                     DataGridViewRow selectedRow = ReservationPaymentsGrid.SelectedRows[0];
                     int PaymentID = Convert.ToInt32(selectedRow.Cells["Payment_ID"].Value);
-                    using (SqlConnection con = DatabaseConnection.GetConnection())
+                    try
                     {
-                        string query = @"Delete from Payment
+                        using (SqlConnection con = DatabaseConnection.GetConnection())
+                        {
+                            string query = @"Delete from Payment
                                          where Payment_ID = @Payment_ID
                                         ";
-                        SqlCommand cmd = new SqlCommand(query, con);
-                        cmd.Parameters.AddWithValue("@Payment_ID", PaymentID);
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Deleted");
-                        Amount.Text = loadAmountDue().ToString();
-                        LoadPayments() ;
+                            SqlCommand cmd = new SqlCommand(query, con);
+                            cmd.Parameters.AddWithValue("@Payment_ID", PaymentID);
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Deleted");
+                            Amount.Text = loadAmountDue().ToString();
+                            LoadPayments();
+                        }
                     }
+                    catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
                 }
             }
             else

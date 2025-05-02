@@ -23,22 +23,27 @@ namespace HotelManagement.Forms
         }
 
         private void loadData() {
-            using (SqlConnection con = DatabaseConnection.GetConnection()) {
-                string query = @"Select * from Hotel
+            try
+            {
+                using (SqlConnection con = DatabaseConnection.GetConnection())
+                {
+                    string query = @"Select * from Hotel
                                  where Hotel_ID = @Hotel_ID
                                 ";
-                SqlCommand command = new SqlCommand(query, con);
-                command.Parameters.AddWithValue("@Hotel_ID", this.HotelID);
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
+                    SqlCommand command = new SqlCommand(query, con);
+                    command.Parameters.AddWithValue("@Hotel_ID", this.HotelID);
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        NameTextBox.Text = reader["Name"].ToString();
-                        LocationTextBox.Text = reader["Location"].ToString();
-                        roomsTextBox.Text = reader["Num_Rooms"].ToString();
+                        if (reader.Read())
+                        {
+                            NameTextBox.Text = reader["Name"].ToString();
+                            LocationTextBox.Text = reader["Location"].ToString();
+                            roomsTextBox.Text = reader["Num_Rooms"].ToString();
+                        }
                     }
                 }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void UpdateButton_Click(object sender, EventArgs e)

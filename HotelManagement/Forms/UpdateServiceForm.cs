@@ -29,18 +29,22 @@ namespace HotelManagement.Forms
 
         private void LoadQuantity()
         {
-            using (SqlConnection conn = DatabaseConnection.GetConnection())
+            try
             {
-                string query = @"Select Quantity from Reservation_Service
+                using (SqlConnection conn = DatabaseConnection.GetConnection())
+                {
+                    string query = @"Select Quantity from Reservation_Service
                                 where Reservation_ID = @Reservation_ID and Service_ID = @Service_ID
                                 ";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
-                cmd.Parameters.AddWithValue("@Service_ID", this.Service_ID);
-                int quantity = (int)cmd.ExecuteScalar();
-                QuantityCounter.Value = quantity;
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@Reservation_ID", this.Reservation_ID);
+                    cmd.Parameters.AddWithValue("@Service_ID", this.Service_ID);
+                    int quantity = (int)cmd.ExecuteScalar();
+                    QuantityCounter.Value = quantity;
 
+                }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
 
         }
 

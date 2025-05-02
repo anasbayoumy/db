@@ -22,17 +22,21 @@ namespace HotelManagement.Forms
 
         private void LoadCategories()
         {
-            using (SqlConnection con = DatabaseConnection.GetConnection())
+            try
             {
-                string query = @"Select c.Hotel_ID, h.Name, c.Category, c.Price
+                using (SqlConnection con = DatabaseConnection.GetConnection())
+                {
+                    string query = @"Select c.Hotel_ID, h.Name, c.Category, c.Price
                                  from Room_Category c
                                  Join Hotel h on c.Hotel_ID = h.Hotel_ID
                                 ";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, con);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
-                RoomCategoriesGrid.DataSource = dataTable;
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, con);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+                    RoomCategoriesGrid.DataSource = dataTable;
+                }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void AddCategory_Click(object sender, EventArgs e)

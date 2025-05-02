@@ -39,22 +39,24 @@ namespace HotelManagement.Forms
             {
                 if (connection != null)
                 {
-                    //connection.Open();
-                    string query = "SELECT Guest_ID, Name FROM Guest";
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
-                    {
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        dt.Columns.Add("DisplayText", typeof(string));
-                        foreach (DataRow row in dt.Rows)
+                    try{
+                        string query = "SELECT Guest_ID, Name FROM Guest";
+                        using (SqlCommand cmd = new SqlCommand(query, connection))
                         {
-                            row["DisplayText"] = $"{row["Guest_ID"]} - {row["Name"]}";
+                            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+                            dt.Columns.Add("DisplayText", typeof(string));
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                row["DisplayText"] = $"{row["Guest_ID"]} - {row["Name"]}";
+                            }
+                            GuestComboBox.DataSource = dt;
+                            GuestComboBox.DisplayMember = "DisplayText";
+                            GuestComboBox.ValueMember = "Guest_ID";
                         }
-                        GuestComboBox.DataSource = dt;
-                        GuestComboBox.DisplayMember = "DisplayText";
-                        GuestComboBox.ValueMember = "Guest_ID";
                     }
+                    catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
                 }
             }
         }
@@ -65,22 +67,25 @@ namespace HotelManagement.Forms
             {
                 if (connection != null)
                 {
-                    //connection.Open();
-                    string query = "SELECT Hotel_ID, Name FROM Hotel";
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    try
                     {
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        HotelComboBox.DataSource = dt;
-                        dt.Columns.Add("DisplayText", typeof(string));
-                        foreach (DataRow row in dt.Rows)
+                        string query = "SELECT Hotel_ID, Name FROM Hotel";
+                        using (SqlCommand cmd = new SqlCommand(query, connection))
                         {
-                            row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
+                            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+                            HotelComboBox.DataSource = dt;
+                            dt.Columns.Add("DisplayText", typeof(string));
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
+                            }
+                            HotelComboBox.DisplayMember = "DisplayText";
+                            HotelComboBox.ValueMember = "Hotel_ID";
                         }
-                        HotelComboBox.DisplayMember = "DisplayText";
-                        HotelComboBox.ValueMember = "Hotel_ID";
                     }
+                    catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
                 }
             }
         }
@@ -108,9 +113,13 @@ namespace HotelManagement.Forms
                     cmd.Parameters.AddWithValue("@Rating", Rating);
                     cmd.Parameters.AddWithValue("@Comments", CommentTextBox.Text);
                     cmd.Parameters.AddWithValue("@Feedback_Date", date);
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Added");
-                    this.Close();
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Added");
+                        this.Close();
+                    }
+                    catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
                 }
             }
             catch (Exception ex) {

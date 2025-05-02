@@ -68,79 +68,96 @@ namespace HotelManagement.Forms
 
         private void LoadGuests()
         {
-            using var connection = DatabaseConnection.GetConnection();
-            string query = "SELECT Guest_ID, Name FROM Guest";
-            using var cmd = new SqlCommand(query, connection);
-            var adapter = new SqlDataAdapter(cmd);
-            var dt = new DataTable();
-            adapter.Fill(dt);
-            dt.Columns.Add("DisplayText", typeof(string));
-            foreach (DataRow row in dt.Rows)
-                row["DisplayText"] = $"{row["Guest_ID"]} - {row["Name"]}";
-            guestComboBox.DataSource = dt;
-            guestComboBox.DisplayMember = "DisplayText";
-            guestComboBox.ValueMember = "Guest_ID";
+            try
+            {
+                using(var connection = DatabaseConnection.GetConnection()){
+                    string query = "SELECT Guest_ID, Name FROM Guest";
+                    using var cmd = new SqlCommand(query, connection);
+                    var adapter = new SqlDataAdapter(cmd);
+                    var dt = new DataTable();
+                    adapter.Fill(dt);
+                    dt.Columns.Add("DisplayText", typeof(string));
+                    foreach (DataRow row in dt.Rows)
+                        row["DisplayText"] = $"{row["Guest_ID"]} - {row["Name"]}";
+                    guestComboBox.DataSource = dt;
+                    guestComboBox.DisplayMember = "DisplayText";
+                    guestComboBox.ValueMember = "Guest_ID";
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void LoadHotels()
         {
-            using var connection = DatabaseConnection.GetConnection();
-            string query = "SELECT Hotel_ID, Name FROM Hotel";
-            using var cmd = new SqlCommand(query, connection);
-            var adapter = new SqlDataAdapter(cmd);
-            var dt = new DataTable();
-            adapter.Fill(dt);
-            dt.Columns.Add("DisplayText", typeof(string));
-            foreach (DataRow row in dt.Rows)
-                row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
-            hotelComboBox.DataSource = dt;
-            hotelComboBox.DisplayMember = "DisplayText";
-            hotelComboBox.ValueMember = "Hotel_ID";
+            try
+            {
+                using (var connection = DatabaseConnection.GetConnection())
+                {
+                    string query = "SELECT Hotel_ID, Name FROM Hotel";
+                    using var cmd = new SqlCommand(query, connection);
+                    var adapter = new SqlDataAdapter(cmd);
+                    var dt = new DataTable();
+                    adapter.Fill(dt);
+                    dt.Columns.Add("DisplayText", typeof(string));
+                    foreach (DataRow row in dt.Rows)
+                        row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
+                    hotelComboBox.DataSource = dt;
+                    hotelComboBox.DisplayMember = "DisplayText";
+                    hotelComboBox.ValueMember = "Hotel_ID";
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void LoadReservationData()
         {
-            using var connection = DatabaseConnection.GetConnection();
-            string query = @"
+            try
+            {
+                using (var connection = DatabaseConnection.GetConnection())
+                {
+                    string query = @"
                 SELECT r.Guest_ID, rr.Hotel_ID, r.Check_in_Date, r.Check_out_Date,
                        rr.Room_Num
                 FROM Reservation r
                 LEFT JOIN Reservation_Rooms rr ON r.Reservation_ID = rr.Reservation_ID
                 WHERE r.Reservation_ID = @ReservationID";
 
-            using var cmd = new SqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@ReservationID", reservationId);
+                    using var cmd = new SqlCommand(query, connection);
+                    cmd.Parameters.AddWithValue("@ReservationID", reservationId);
 
-            using var adapter = new SqlDataAdapter(cmd);
-            var dt = new DataTable();
-            adapter.Fill(dt);
+                    using var adapter = new SqlDataAdapter(cmd);
+                    var dt = new DataTable();
+                    adapter.Fill(dt);
 
-            if (dt.Rows.Count == 0)
-            {
-                MessageBox.Show("Reservation not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DialogResult = DialogResult.Cancel;
-                Close();
-                return;
-            }
+                    if (dt.Rows.Count == 0)
+                    {
+                        MessageBox.Show("Reservation not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        DialogResult = DialogResult.Cancel;
+                        Close();
+                        return;
+                    }
 
-            DataRow firstRow = dt.Rows[0];
+                    DataRow firstRow = dt.Rows[0];
 
-            guestComboBox.SelectedValue = Convert.ToInt32(firstRow["Guest_ID"]);
-            hotelComboBox.SelectedValue = Convert.ToInt32(firstRow["Hotel_ID"]);
-            checkInPicker.Value = Convert.ToDateTime(firstRow["Check_in_Date"]);
-            checkOutPicker.Value = Convert.ToDateTime(firstRow["Check_out_Date"]);
+                    guestComboBox.SelectedValue = Convert.ToInt32(firstRow["Guest_ID"]);
+                    hotelComboBox.SelectedValue = Convert.ToInt32(firstRow["Hotel_ID"]);
+                    checkInPicker.Value = Convert.ToDateTime(firstRow["Check_in_Date"]);
+                    checkOutPicker.Value = Convert.ToDateTime(firstRow["Check_out_Date"]);
 
-            HotelComboBox_SelectedIndexChanged(null, null); // Load rooms
+                    HotelComboBox_SelectedIndexChanged(null, null); // Load rooms
 
-            foreach (DataRow row in dt.Rows)
-            {
-                string roomNum = row["Room_Num"].ToString();
-                for (int i = 0; i < roomsListBox.Items.Count; i++)
-                {
-                    if (roomsListBox.Items[i].ToString() == roomNum)
-                        roomsListBox.SetItemChecked(i, true);
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string roomNum = row["Room_Num"].ToString();
+                        for (int i = 0; i < roomsListBox.Items.Count; i++)
+                        {
+                            if (roomsListBox.Items[i].ToString() == roomNum)
+                                roomsListBox.SetItemChecked(i, true);
+                        }
+                    }
                 }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void HotelComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -148,15 +165,20 @@ namespace HotelManagement.Forms
             if (hotelComboBox.SelectedValue is int hotelId)
             {
                 roomsListBox.Items.Clear();
-                using var connection = DatabaseConnection.GetConnection();
-                string query = "SELECT Room_Num FROM Room WHERE Hotel_ID = @HotelID";
-                using var cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@HotelID", hotelId);
-                using var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                try
                 {
-                    roomsListBox.Items.Add(reader["Room_Num"].ToString());
+                    using (var connection = DatabaseConnection.GetConnection()){
+                        string query = "SELECT Room_Num FROM Room WHERE Hotel_ID = @HotelID";
+                        using var cmd = new SqlCommand(query, connection);
+                        cmd.Parameters.AddWithValue("@HotelID", hotelId);
+                        using var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            roomsListBox.Items.Add(reader["Room_Num"].ToString());
+                        }
+                    }
                 }
+                catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
             }
         }
 
@@ -174,89 +196,90 @@ namespace HotelManagement.Forms
                 return;
             }
 
-            using var connection = DatabaseConnection.GetConnection();
+            using (var connection = DatabaseConnection.GetConnection()){
 
-            try
-            {
-                int hotelId = Convert.ToInt32(hotelComboBox.SelectedValue);
-                DateTime checkIn = checkInPicker.Value.Date;
-                DateTime checkOut = checkOutPicker.Value.Date;
-
-                // Validate each selected room for availability
-                foreach (var room in roomsListBox.CheckedItems)
+                try
                 {
-                    string roomNum = room.ToString();
+                    int hotelId = Convert.ToInt32(hotelComboBox.SelectedValue);
+                    DateTime checkIn = checkInPicker.Value.Date;
+                    DateTime checkOut = checkOutPicker.Value.Date;
 
-                    string checkQuery = @"
-                SELECT COUNT(*) FROM Reservation_Rooms rr
-                JOIN Reservation r ON rr.Reservation_ID = r.Reservation_ID
-                WHERE rr.Hotel_ID = @HotelID
-                  AND rr.Room_Num = @RoomNum
-                  AND r.Reservation_ID != @CurrentReservationID
-                  AND r.Status IN ('Pending', 'Confirmed')
-                  AND NOT (r.Check_out_Date <= @CheckIn OR r.Check_in_Date >= @CheckOut)";
-
-                    using var checkCmd = new SqlCommand(checkQuery, connection);
-                    checkCmd.Parameters.AddWithValue("@HotelID", hotelId);
-                    checkCmd.Parameters.AddWithValue("@RoomNum", roomNum);
-                    checkCmd.Parameters.AddWithValue("@CurrentReservationID", reservationId);
-                    checkCmd.Parameters.AddWithValue("@CheckIn", checkIn);
-                    checkCmd.Parameters.AddWithValue("@CheckOut", checkOut);
-
-                    int count = (int)checkCmd.ExecuteScalar();
-                    if (count > 0)
+                    // Validate each selected room for availability
+                    foreach (var room in roomsListBox.CheckedItems)
                     {
-                        MessageBox.Show($"Room {roomNum} is already booked in the selected dates.", "Room Unavailable", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        string roomNum = room.ToString();
+
+                        string checkQuery = @"
+                                            SELECT COUNT(*) FROM Reservation_Rooms rr
+                                            JOIN Reservation r ON rr.Reservation_ID = r.Reservation_ID
+                                            WHERE rr.Hotel_ID = @HotelID
+                                              AND rr.Room_Num = @RoomNum
+                                              AND r.Reservation_ID != @CurrentReservationID
+                                              AND r.Status IN ('Pending', 'Confirmed')
+                                              AND NOT (r.Check_out_Date <= @CheckIn OR r.Check_in_Date >= @CheckOut)";
+
+                        using var checkCmd = new SqlCommand(checkQuery, connection);
+                        checkCmd.Parameters.AddWithValue("@HotelID", hotelId);
+                        checkCmd.Parameters.AddWithValue("@RoomNum", roomNum);
+                        checkCmd.Parameters.AddWithValue("@CurrentReservationID", reservationId);
+                        checkCmd.Parameters.AddWithValue("@CheckIn", checkIn);
+                        checkCmd.Parameters.AddWithValue("@CheckOut", checkOut);
+
+                        int count = (int)checkCmd.ExecuteScalar();
+                        if (count > 0)
+                        {
+                            MessageBox.Show($"Room {roomNum} is already booked in the selected dates.", "Room Unavailable", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
                     }
-                }
 
-                // Update reservation
-                string updateQuery = @"
-            UPDATE Reservation
-            SET Guest_ID = @GuestID,
-                Check_in_Date = @CheckIn,
-                Check_out_Date = @CheckOut
-            WHERE Reservation_ID = @ReservationID";
+                    // Update reservation
+                    string updateQuery = @"
+                                            UPDATE Reservation
+                                            SET Guest_ID = @GuestID,
+                                                Check_in_Date = @CheckIn,
+                                                Check_out_Date = @CheckOut
+                                            WHERE Reservation_ID = @ReservationID";
 
-                using (var cmd = new SqlCommand(updateQuery, connection))
-                {
-                    cmd.Parameters.AddWithValue("@GuestID", guestComboBox.SelectedValue);
-                    cmd.Parameters.AddWithValue("@CheckIn", checkIn);
-                    cmd.Parameters.AddWithValue("@CheckOut", checkOut);
-                    cmd.Parameters.AddWithValue("@ReservationID", reservationId);
-                    cmd.ExecuteNonQuery();
-                }
-
-                // Delete old room assignments
-                string deleteRoomsQuery = "DELETE FROM Reservation_Rooms WHERE Reservation_ID = @ReservationID";
-                using (var cmd = new SqlCommand(deleteRoomsQuery, connection))
-                {
-                    cmd.Parameters.AddWithValue("@ReservationID", reservationId);
-                    cmd.ExecuteNonQuery();
-                }
-
-                // Insert new room assignments
-                foreach (var room in roomsListBox.CheckedItems)
-                {
-                    string insertRoomQuery = @"
-                INSERT INTO Reservation_Rooms (Reservation_ID, Room_Num, Hotel_ID)
-                VALUES (@ReservationID, @RoomNum, @HotelID)";
-                    using (var cmd = new SqlCommand(insertRoomQuery, connection))
+                    using (var cmd = new SqlCommand(updateQuery, connection))
                     {
+                        cmd.Parameters.AddWithValue("@GuestID", guestComboBox.SelectedValue);
+                        cmd.Parameters.AddWithValue("@CheckIn", checkIn);
+                        cmd.Parameters.AddWithValue("@CheckOut", checkOut);
                         cmd.Parameters.AddWithValue("@ReservationID", reservationId);
-                        cmd.Parameters.AddWithValue("@RoomNum", room.ToString());
-                        cmd.Parameters.AddWithValue("@HotelID", hotelId);
                         cmd.ExecuteNonQuery();
                     }
-                }
 
-                MessageBox.Show("Reservation updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating reservation: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Delete old room assignments
+                    string deleteRoomsQuery = "DELETE FROM Reservation_Rooms WHERE Reservation_ID = @ReservationID";
+                    using (var cmd = new SqlCommand(deleteRoomsQuery, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@ReservationID", reservationId);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // Insert new room assignments
+                    foreach (var room in roomsListBox.CheckedItems)
+                    {
+                        string insertRoomQuery = @"
+                                                    INSERT INTO Reservation_Rooms (Reservation_ID, Room_Num, Hotel_ID)
+                                                    VALUES (@ReservationID, @RoomNum, @HotelID)";
+                        using (var cmd = new SqlCommand(insertRoomQuery, connection))
+                        {
+                            cmd.Parameters.AddWithValue("@ReservationID", reservationId);
+                            cmd.Parameters.AddWithValue("@RoomNum", room.ToString());
+                            cmd.Parameters.AddWithValue("@HotelID", hotelId);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    MessageBox.Show("Reservation updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error updating reservation: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

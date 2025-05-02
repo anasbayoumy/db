@@ -21,15 +21,19 @@ namespace HotelManagement.Forms
         }
         private void LoadData()
         {
-            using (SqlConnection con = DatabaseConnection.GetConnection())
+            try
             {
-                string query = @"Select * from Payment";
-                SqlCommand cmd = new SqlCommand(query, con);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
-                PaymentsGrid.DataSource = dataTable;
+                using (SqlConnection con = DatabaseConnection.GetConnection())
+                {
+                    string query = @"Select * from Payment";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+                    PaymentsGrid.DataSource = dataTable;
+                }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
         private void button3_Click(object sender, EventArgs e)
         {//Delete

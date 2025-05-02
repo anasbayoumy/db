@@ -161,7 +161,11 @@ namespace HotelManagement.Forms
                 string query = @"Raise_All_Prices_By_10_Percent";
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
                 MessageBox.Show("Prices have been increased by 10%.", "Success");
             }
         }

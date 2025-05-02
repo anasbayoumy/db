@@ -31,74 +31,87 @@ namespace HotelManagement.Forms
             {
                 RatingComboBox.Items.Add(i);
             }
-            using (SqlConnection con = DatabaseConnection.GetConnection()) {
-                string query = @"Select * from Feedback
+            try
+            {
+                using (SqlConnection con = DatabaseConnection.GetConnection())
+                {
+                    string query = @"Select * from Feedback
                                  where Feedback_ID = @Feedback_ID
                                 ";
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@Feedback_ID", this.FeedbackID);
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@Feedback_ID", this.FeedbackID);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        GuestComboBox.SelectedValue = (int)reader["Guest_ID"];
-                        HotelComboBox.SelectedValue = (int)reader["Hotel_ID"];
-                        RatingComboBox.SelectedItem = (int)reader["Rating"];
-                        CommentTextBox.Text = reader["Comments"].ToString();
+                        if (reader.Read())
+                        {
+                            GuestComboBox.SelectedValue = (int)reader["Guest_ID"];
+                            HotelComboBox.SelectedValue = (int)reader["Hotel_ID"];
+                            RatingComboBox.SelectedItem = (int)reader["Rating"];
+                            CommentTextBox.Text = reader["Comments"].ToString();
+                        }
                     }
                 }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
         private void LoadGuests()
         {
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                if (connection != null)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    //connection.Open();
-                    string query = "SELECT Guest_ID, Name FROM Guest";
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    if (connection != null)
                     {
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        dt.Columns.Add("DisplayText", typeof(string));
-                        foreach (DataRow row in dt.Rows)
+                        //connection.Open();
+                        string query = "SELECT Guest_ID, Name FROM Guest";
+                        using (SqlCommand cmd = new SqlCommand(query, connection))
                         {
-                            row["DisplayText"] = $"{row["Guest_ID"]} - {row["Name"]}";
+                            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+                            dt.Columns.Add("DisplayText", typeof(string));
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                row["DisplayText"] = $"{row["Guest_ID"]} - {row["Name"]}";
+                            }
+                            GuestComboBox.DataSource = dt;
+                            GuestComboBox.DisplayMember = "DisplayText";
+                            GuestComboBox.ValueMember = "Guest_ID";
                         }
-                        GuestComboBox.DataSource = dt;
-                        GuestComboBox.DisplayMember = "DisplayText";
-                        GuestComboBox.ValueMember = "Guest_ID";
                     }
                 }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void LoadHotels()
         {
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                if (connection != null)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    //connection.Open();
-                    string query = "SELECT Hotel_ID, Name FROM Hotel";
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    if (connection != null)
                     {
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        HotelComboBox.DataSource = dt;
-                        dt.Columns.Add("DisplayText", typeof(string));
-                        foreach (DataRow row in dt.Rows)
+                        //connection.Open();
+                        string query = "SELECT Hotel_ID, Name FROM Hotel";
+                        using (SqlCommand cmd = new SqlCommand(query, connection))
                         {
-                            row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
+                            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+                            HotelComboBox.DataSource = dt;
+                            dt.Columns.Add("DisplayText", typeof(string));
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                row["DisplayText"] = $"{row["Hotel_ID"]} - {row["Name"]}";
+                            }
+                            HotelComboBox.DisplayMember = "DisplayText";
+                            HotelComboBox.ValueMember = "Hotel_ID";
                         }
-                        HotelComboBox.DisplayMember = "DisplayText";
-                        HotelComboBox.ValueMember = "Hotel_ID";
                     }
                 }
             }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void Update_Click(object sender, EventArgs e)

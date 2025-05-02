@@ -35,9 +35,13 @@ namespace HotelManagement.Forms
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@HotelID", this.hotelID);
                 cmd.Parameters.AddWithValue("@Email", Emailtextbox.Text);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Added");
-                this.Close();
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Added");
+                    this.Close();
+                }
+                catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
             }
         }
     }
