@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HotelManagement.Data;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace HotelManagement.Forms
 {
@@ -22,73 +23,81 @@ namespace HotelManagement.Forms
             LoadPayments();
             Amount.Text = loadAmountDue().ToString();
         }
-        private int loadAmountDue()
+        private decimal loadAmountDue()
         {
             try
             {
                 using (SqlConnection conn = DatabaseConnection.GetConnection())
                 {
-                    //Amount due from services
-                    int servicesCost=0;
-                    string query1 = @"select SUM(res.quantity * s.Cost)
-                                    from Reservation_Service res
-                                    join Service s on res.Service_ID = s.Service_ID
-                                    where res.Reservation_ID = @Reservation_ID
-                                    ";
-                    SqlCommand cmd1 = new SqlCommand(query1, conn);
-                    cmd1.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                    var res1 = cmd1.ExecuteScalar();
-                    if (res1 != DBNull.Value)
-                    {
-                        servicesCost = Convert.ToInt32(res1);
-                    }
-                    //Get number of nights
-                    int nights=0;
-                    string query2 = @"select DATEDIFF(DAY, Check_in_Date, Check_out_Date)
-                                      from Reservation
-                                      where Reservation_ID = @Reservation_ID
-                                    ";
-                    SqlCommand cmd2 = new SqlCommand(query2, conn);
-                    cmd2.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                    var res2 = cmd2.ExecuteScalar();
-                    if (res2 != DBNull.Value)
-                    {
-                        nights = Convert.ToInt32(res2);
-                    }
-                    //Amount due from rooms prices
-                    int RoomsCost=0;
-                    string query3 = @"select SUM(c.Price * @Nights)
-                                      from Reservation_Rooms res
-                                      join Room r on res.Room_Num = r.Room_Num and res.Hotel_ID = r.Hotel_ID
-                                      join Room_Category c on res.Hotel_ID = c.Hotel_ID and r.Category = c.Category
-                                      where res.Reservation_ID = @Reservation_ID
-                                    ";
-                    SqlCommand cmd3 = new SqlCommand(query3, conn);
-                    cmd3.Parameters.AddWithValue("@Nights", nights);
-                    cmd3.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                    var res3 = cmd3.ExecuteScalar();
-                    if (res3 != DBNull.Value)
-                    {
-                        RoomsCost = Convert.ToInt32(res3);
-                    }
-                    
+                    /* //Amount due from services
+                     int servicesCost=0;
+                     string query1 = @"select SUM(res.quantity * s.Cost)
+                                     from Reservation_Service res
+                                     join Service s on res.Service_ID = s.Service_ID
+                                     where res.Reservation_ID = @Reservation_ID
+                                     ";
+                     SqlCommand cmd1 = new SqlCommand(query1, conn);
+                     cmd1.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
+                     var res1 = cmd1.ExecuteScalar();
+                     if (res1 != DBNull.Value)
+                     {
+                         servicesCost = Convert.ToInt32(res1);
+                     }
+                     //Get number of nights
+                     int nights=0;
+                     string query2 = @"select DATEDIFF(DAY, Check_in_Date, Check_out_Date)
+                                       from Reservation
+                                       where Reservation_ID = @Reservation_ID
+                                     ";
+                     SqlCommand cmd2 = new SqlCommand(query2, conn);
+                     cmd2.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
+                     var res2 = cmd2.ExecuteScalar();
+                     if (res2 != DBNull.Value)
+                     {
+                         nights = Convert.ToInt32(res2);
+                     }
+                     //Amount due from rooms prices
+                     int RoomsCost=0;
+                     string query3 = @"select SUM(c.Price * @Nights)
+                                       from Reservation_Rooms res
+                                       join Room r on res.Room_Num = r.Room_Num and res.Hotel_ID = r.Hotel_ID
+                                       join Room_Category c on res.Hotel_ID = c.Hotel_ID and r.Category = c.Category
+                                       where res.Reservation_ID = @Reservation_ID
+                                     ";
+                     SqlCommand cmd3 = new SqlCommand(query3, conn);
+                     cmd3.Parameters.AddWithValue("@Nights", nights);
+                     cmd3.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
+                     var res3 = cmd3.ExecuteScalar();
+                     if (res3 != DBNull.Value)
+                     {
+                         RoomsCost = Convert.ToInt32(res3);
+                     }
 
-                    int total = RoomsCost + servicesCost;
-                    //Remove amount paid by any previous payments
-                    int paid = 0;
-                    string query4 = @"select SUM(Amount)
-                                      from Payment
-                                      where Reservation_ID = @Reservation_ID
-                                    ";
-                    SqlCommand cmd4 = new SqlCommand(query4, conn);
-                    cmd4.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
-                    var res4 = cmd4.ExecuteScalar();
-                    if (res4 != DBNull.Value)
-                    {
-                        paid = Convert.ToInt32(res4);
-                    }
-                    int final = total - paid;
-                    return final;
+
+                     int total = RoomsCost + servicesCost;
+                     //Remove amount paid by any previous payments
+                     int paid = 0;
+                     string query4 = @"select SUM(Amount)
+                                       from Payment
+                                       where Reservation_ID = @Reservation_ID
+                                     ";
+                     SqlCommand cmd4 = new SqlCommand(query4, conn);
+                     cmd4.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
+                     var res4 = cmd4.ExecuteScalar();
+                     if (res4 != DBNull.Value)
+                     {
+                         paid = Convert.ToInt32(res4);
+                     }
+                     int final = total - paid;
+                     return final;*/
+                    decimal amount = 0;
+                    string query = @"SELECT dbo.Get_Reservation_Amount_Due(@Reservation_ID)";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@Reservation_ID", this.ReservationID);
+                    decimal result = (decimal)cmd.ExecuteScalar();
+                    if (result > 0) { amount = result; }
+                    return amount;
+
                 }
             }
             catch (Exception ex)
