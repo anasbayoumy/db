@@ -92,10 +92,21 @@ namespace HotelManagement.Forms
                 {
                     using (SqlConnection con = DatabaseConnection.GetConnection())
                     {
+                        /*string delete1 = @"Delete from Hotel_emails
+                                           where Hotel_ID = @Hotel_ID
+                                          ";
+                        SqlCommand deletecmd = new SqlCommand(delete1, con);
+                        deletecmd.Parameters.AddWithValue("@Hotel_ID", Hotel_ID);
+                        deletecmd.ExecuteNonQuery();
                         string query = @"Delete From Hotel
                                      Where Hotel_ID = @Hotel_ID 
                                     ";
                         SqlCommand cmd = new SqlCommand(query, con);
+                        cmd.Parameters.AddWithValue("@Hotel_ID", Hotel_ID);
+                        cmd.ExecuteNonQuery();*/
+                        string query = @"DeleteHotelAndEmails";
+                        SqlCommand cmd = new SqlCommand(query, con);
+                        cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@Hotel_ID", Hotel_ID);
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Deleted");

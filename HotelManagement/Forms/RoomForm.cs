@@ -63,7 +63,7 @@ namespace HotelManagement.Forms
             {
                 Text = "Add Room",
                 Location = new System.Drawing.Point(20, 470),
-                Size = new System.Drawing.Size(100, 30)
+                Size = new System.Drawing.Size(100, 50)
             };
             addButton.Click += AddButton_Click;
 
@@ -71,7 +71,7 @@ namespace HotelManagement.Forms
             {
                 Text = "Update Room",
                 Location = new System.Drawing.Point(140, 470),
-                Size = new System.Drawing.Size(100, 30)
+                Size = new System.Drawing.Size(100, 50)
             };
             updateButton.Click += UpdateButton_Click;
 
@@ -79,7 +79,7 @@ namespace HotelManagement.Forms
             {
                 Text = "Delete Room",
                 Location = new System.Drawing.Point(260, 470),
-                Size = new System.Drawing.Size(100, 30)
+                Size = new System.Drawing.Size(100, 50)
             };
             deleteButton.Click += DeleteButton_Click;
 
@@ -87,7 +87,7 @@ namespace HotelManagement.Forms
             {
                 Text = "Refresh",
                 Location = new System.Drawing.Point(380, 470),
-                Size = new System.Drawing.Size(100, 30)
+                Size = new System.Drawing.Size(100, 50)
             };
             refreshButton.Click += RefreshButton_Click;
 
