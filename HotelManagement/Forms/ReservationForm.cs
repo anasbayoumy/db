@@ -143,6 +143,7 @@ namespace HotelManagement.Forms
             // 
             reservationGridView.AllowUserToAddRows = false;
             reservationGridView.AllowUserToDeleteRows = false;
+            reservationGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             reservationGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             reservationGridView.Dock = DockStyle.Top;
             reservationGridView.Location = new Point(0, 0);
@@ -157,9 +158,9 @@ namespace HotelManagement.Forms
             // 
             // AddReservation
             // 
-            AddReservation.Location = new Point(23, 374);
+            AddReservation.Location = new Point(12, 374);
             AddReservation.Name = "AddReservation";
-            AddReservation.Size = new Size(94, 29);
+            AddReservation.Size = new Size(144, 45);
             AddReservation.TabIndex = 1;
             AddReservation.Text = "Add";
             AddReservation.UseVisualStyleBackColor = true;
@@ -167,9 +168,9 @@ namespace HotelManagement.Forms
             // 
             // updateReservation
             // 
-            updateReservation.Location = new Point(144, 374);
+            updateReservation.Location = new Point(176, 374);
             updateReservation.Name = "updateReservation";
-            updateReservation.Size = new Size(94, 29);
+            updateReservation.Size = new Size(156, 45);
             updateReservation.TabIndex = 2;
             updateReservation.Text = "Update";
             updateReservation.UseVisualStyleBackColor = true;
@@ -177,9 +178,9 @@ namespace HotelManagement.Forms
             // 
             // DeleteReservation
             // 
-            DeleteReservation.Location = new Point(265, 374);
+            DeleteReservation.Location = new Point(348, 374);
             DeleteReservation.Name = "DeleteReservation";
-            DeleteReservation.Size = new Size(94, 29);
+            DeleteReservation.Size = new Size(156, 45);
             DeleteReservation.TabIndex = 3;
             DeleteReservation.Text = "Delete";
             DeleteReservation.UseVisualStyleBackColor = true;
@@ -187,9 +188,9 @@ namespace HotelManagement.Forms
             // 
             // viewServices
             // 
-            viewServices.Location = new Point(376, 374);
+            viewServices.Location = new Point(522, 374);
             viewServices.Name = "viewServices";
-            viewServices.Size = new Size(117, 29);
+            viewServices.Size = new Size(156, 45);
             viewServices.TabIndex = 4;
             viewServices.Text = "View Services";
             viewServices.UseVisualStyleBackColor = true;
@@ -197,9 +198,9 @@ namespace HotelManagement.Forms
             // 
             // viewPayments
             // 
-            viewPayments.Location = new Point(510, 374);
+            viewPayments.Location = new Point(697, 374);
             viewPayments.Name = "viewPayments";
-            viewPayments.Size = new Size(135, 29);
+            viewPayments.Size = new Size(156, 45);
             viewPayments.TabIndex = 5;
             viewPayments.Text = "View Payments";
             viewPayments.UseVisualStyleBackColor = true;

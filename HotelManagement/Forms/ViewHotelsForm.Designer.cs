@@ -40,6 +40,7 @@
             // 
             HotelsGrid.AllowUserToAddRows = false;
             HotelsGrid.AllowUserToDeleteRows = false;
+            HotelsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             HotelsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             HotelsGrid.Dock = DockStyle.Top;
             HotelsGrid.Location = new Point(0, 0);

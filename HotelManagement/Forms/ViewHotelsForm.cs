@@ -26,18 +26,19 @@ namespace HotelManagement.Forms
             using (SqlConnection conn = DatabaseConnection.GetConnection())
             {
 
-                string query = @"
-                                UPDATE h
-                                SET h.Rating = ISNULL(avgRatings.avg, 0)
-                                FROM Hotel h
-                                LEFT JOIN (
-                                    SELECT Hotel_ID, AVG(CAST(Rating AS DECIMAL(3,1))) AS avg
-                                    FROM Feedback
-                                    GROUP BY Hotel_ID
-                                ) AS avgRatings ON h.Hotel_ID = avgRatings.Hotel_ID;
-                                ";
-
+                /* string query = @"
+                                 UPDATE h
+                                 SET h.Rating = ISNULL(avgRatings.avg, 0)
+                                 FROM Hotel h
+                                 LEFT JOIN (
+                                     SELECT Hotel_ID, AVG(CAST(Rating AS DECIMAL(3,1))) AS avg
+                                     FROM Feedback
+                                     GROUP BY Hotel_ID
+                                 ) AS avgRatings ON h.Hotel_ID = avgRatings.Hotel_ID;
+                                 ";*/
+                string query = @"Update_Hotel_Ratings";
                 SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
             }
         }
