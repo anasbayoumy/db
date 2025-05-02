@@ -3,6 +3,7 @@ using System.Data;
 using System.Windows.Forms;
 using HotelManagement.Data;
 using System.Data.SqlClient;
+using System.Reflection.Metadata;
 
 namespace HotelManagement.Forms
 {
@@ -253,21 +254,26 @@ namespace HotelManagement.Forms
                                     MessageBox.Show("Cannot delete reservation, a payment was made already.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 else
-                                { 
-                                    string delete1 = "DELETE FROM Reservation_Service WHERE Reservation_ID = @Reservation_ID";
-                                    SqlCommand command = new SqlCommand(delete1, connection);
-                                    command.Parameters.AddWithValue("@Reservation_ID", reservationID);
-                                    command.ExecuteNonQuery();
+                                {
+                                    /* string delete1 = "DELETE FROM Reservation_Service WHERE Reservation_ID = @Reservation_ID";
+                                     SqlCommand command = new SqlCommand(delete1, connection);
+                                     command.Parameters.AddWithValue("@Reservation_ID", reservationID);
+                                     command.ExecuteNonQuery();
 
-                                    string delete2 = "DELETE FROM Reservation_Rooms WHERE Reservation_ID = @Reservation_ID";
-                                    SqlCommand command2 = new SqlCommand(delete2, connection);
-                                    command2.Parameters.AddWithValue("@Reservation_ID", reservationID);
-                                    command2.ExecuteNonQuery();
+                                     string delete2 = "DELETE FROM Reservation_Rooms WHERE Reservation_ID = @Reservation_ID";
+                                     SqlCommand command2 = new SqlCommand(delete2, connection);
+                                     command2.Parameters.AddWithValue("@Reservation_ID", reservationID);
+                                     command2.ExecuteNonQuery();
 
-                                    string delete3 = "DELETE FROM Reservation WHERE Reservation_ID = @Reservation_ID";
-                                    SqlCommand command3 = new SqlCommand(delete3, connection);
-                                    command3.Parameters.AddWithValue("@Reservation_ID", reservationID);
-                                    command3.ExecuteNonQuery();
+                                     string delete3 = "DELETE FROM Reservation WHERE Reservation_ID = @Reservation_ID";
+                                     SqlCommand command3 = new SqlCommand(delete3, connection);
+                                     command3.Parameters.AddWithValue("@Reservation_ID", reservationID);
+                                     command3.ExecuteNonQuery();*/
+                                    string delete = @"DeleteReservationCascade";
+                                    SqlCommand cmd = new SqlCommand(delete, connection);
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Parameters.AddWithValue("@Reservation_ID", reservationID);
+                                    cmd.ExecuteNonQuery();
                                 }
                                 LoadReservations();
                             }
