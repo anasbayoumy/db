@@ -12,7 +12,7 @@ namespace HotelManagement.Forms
 
         private void InitializeUI()
         {
-            this.Text = "Hotel Management System";
+            this.Text = "Hotel Reservation System";
             this.Size = new System.Drawing.Size(800, 600);
 
            /* // Create menu strip
@@ -26,7 +26,7 @@ namespace HotelManagement.Forms
             // Create buttons for different operations
             Button guestButton = new Button
             {
-                Text = "Manage Guests",
+                Text = "View Guests",
                 Location = new System.Drawing.Point(50, 50),
                 Size = new System.Drawing.Size(300, 40)
             };
@@ -34,7 +34,7 @@ namespace HotelManagement.Forms
 
             Button roomButton = new Button
             {
-                Text = "Manage Rooms",
+                Text = "View Rooms",
                 Location = new System.Drawing.Point(50, 100),
                 Size = new System.Drawing.Size(300, 40)
             };
@@ -42,7 +42,7 @@ namespace HotelManagement.Forms
 
             Button reservationButton = new Button
             {
-                Text = "Manage Reservations",
+                Text = "View Reservations",
                 Location = new System.Drawing.Point(50, 150),
                 Size = new System.Drawing.Size(300, 40)
             };
@@ -50,7 +50,7 @@ namespace HotelManagement.Forms
 
             Button CategoryButton = new Button
             {
-                Text = "Manage Room Categories",
+                Text = "View Room Categories",
                 Location = new System.Drawing.Point(50, 200),
                 Size = new System.Drawing.Size(300, 40)
             };
@@ -58,7 +58,7 @@ namespace HotelManagement.Forms
 
             Button hotelButton = new Button
             {
-                Text = "Manage Hotels",
+                Text = "View Hotels",
                 Location = new System.Drawing.Point(50, 250),
                 Size = new System.Drawing.Size(300, 40)
             };
@@ -66,7 +66,7 @@ namespace HotelManagement.Forms
 
             Button servicesButton = new Button
             {
-                Text = "Manage Services",
+                Text = "View Services",
                 Location = new System.Drawing.Point(50, 300),
                 Size = new System.Drawing.Size(300, 40)
             };
@@ -74,7 +74,7 @@ namespace HotelManagement.Forms
 
             Button paymentButton = new Button
             {
-                Text = "Manage Payment",
+                Text = "View Payment",
                 Location = new System.Drawing.Point(50, 350),
                 Size = new System.Drawing.Size(300, 40)
             };
@@ -82,7 +82,7 @@ namespace HotelManagement.Forms
 
             Button feedbackButton = new Button
             {
-                Text = "Manage Feedback",
+                Text = "View Feedback",
                 Location = new System.Drawing.Point(50, 400),
                 Size = new System.Drawing.Size(300, 40)
             };

@@ -39,6 +39,7 @@ namespace HotelManagement.Forms
                 Size = new System.Drawing.Size(240, 20),
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
+            hotelComboBox.SelectedIndexChanged += HotelComboBox_SelectedIndexChanged;
 
             Label roomNumLabel = new Label { Text = "Room Number:", Location = new System.Drawing.Point(20, 60) };
             roomNumTextBox = new TextBox { Location = new System.Drawing.Point(120, 60), Size = new System.Drawing.Size(240, 20) };
@@ -50,7 +51,7 @@ namespace HotelManagement.Forms
                 Size = new System.Drawing.Size(240, 20),
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
-            categoryComboBox.Items.AddRange(new string[] { "Standard", "Deluxe", "Suite", "Executive" });
+            
 
             /*Label rentLabel = new Label { Text = "Rent:", Location = new System.Drawing.Point(20, 140) };
             rentTextBox = new TextBox { Location = new System.Drawing.Point(120, 140), Size = new System.Drawing.Size(240, 20) };*/
@@ -89,6 +90,41 @@ namespace HotelManagement.Forms
                 statusLabel, statusComboBox,
                 saveButton, cancelButton
             });
+        }
+        private void HotelComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            categoryComboBox.Items.Clear();
+
+            if (hotelComboBox.SelectedItem is ComboBoxItem selectedHotel)
+            {
+                try
+                {
+                    using (SqlConnection connection = DatabaseConnection.GetConnection())
+                    {
+                        string query = @"SELECT DISTINCT Category 
+                                 FROM Room 
+                                 WHERE Hotel_ID = @HotelID";
+
+                        SqlCommand cmd = new SqlCommand(query, connection);
+                        cmd.Parameters.AddWithValue("@HotelID", selectedHotel.Id);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                categoryComboBox.Items.Add(reader.GetString(0));
+                            }
+                        }
+
+                        if (categoryComboBox.Items.Count > 0)
+                            categoryComboBox.SelectedIndex = 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error loading categories: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void LoadHotels()
