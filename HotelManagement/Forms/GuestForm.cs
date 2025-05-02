@@ -153,10 +153,21 @@ namespace HotelManagement.Forms
                         {
                             if (connection != null)
                             {
+                                /*string delete1 = @"Delete from Guest_Phone_nums
+                                                    where Guest_ID = @Guest_ID
+                                                    ";
+                                SqlCommand deletecmd = new SqlCommand(delete1,connection);
+                                deletecmd.Parameters.AddWithValue("@Guest_ID", guestId);
+                                deletecmd.ExecuteNonQuery();
                                 string query = "DELETE FROM Guest WHERE Guest_ID = @Guest_ID";
                                 SqlCommand command = new SqlCommand(query, connection);
                                 command.Parameters.AddWithValue("@Guest_ID", guestId);
-                                command.ExecuteNonQuery();
+                                command.ExecuteNonQuery();*/
+                                string query = @"DeleteGuestAndPhones";
+                                SqlCommand cmd = new SqlCommand(query, connection);
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.AddWithValue ("@Guest_ID" , guestId);
+                                cmd.ExecuteNonQuery();
                                 LoadGuestData();
                             }
                         }

@@ -38,7 +38,7 @@ namespace HotelManagement.Forms
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(AmountTextBox.Text, out int amount) || amount <= 0)
+            if (!decimal.TryParse(AmountTextBox.Text, out decimal amount) || amount <= 0)
             {
                 MessageBox.Show("Please enter a valid positive number for the amount.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
