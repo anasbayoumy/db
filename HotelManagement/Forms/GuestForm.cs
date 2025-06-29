@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using HotelManagement.Data;
 
 namespace HotelManagement.Forms
@@ -13,6 +13,7 @@ namespace HotelManagement.Forms
         private Button updateButton;
         private Button deleteButton;
         private Button refreshButton;
+        private Button phonesButton;
 
         public GuestForm()
         {
@@ -40,31 +41,39 @@ namespace HotelManagement.Forms
             {
                 Text = "Add Guest",
                 Location = new System.Drawing.Point(20, 440),
-                Size = new System.Drawing.Size(100, 30)
+                Size = new System.Drawing.Size(120, 50)
             };
             addButton.Click += AddButton_Click;
 
             updateButton = new Button
             {
                 Text = "Update Guest",
-                Location = new System.Drawing.Point(140, 440),
-                Size = new System.Drawing.Size(100, 30)
+                Location = new System.Drawing.Point(155, 440),
+                Size = new System.Drawing.Size(120, 50)
             };
             updateButton.Click += UpdateButton_Click;
 
             deleteButton = new Button
             {
                 Text = "Delete Guest",
-                Location = new System.Drawing.Point(260, 440),
-                Size = new System.Drawing.Size(100, 30)
+                Location = new System.Drawing.Point(285, 440),
+                Size = new System.Drawing.Size(120, 50)
             };
             deleteButton.Click += DeleteButton_Click;
+
+            phonesButton = new Button
+            {
+                Text = "View phones",
+                Location = new System.Drawing.Point(415, 440),
+                Size = new System.Drawing.Size(120, 50)
+            };
+            phonesButton.Click += PhonesButton_Click;
 
             refreshButton = new Button
             {
                 Text = "Refresh",
-                Location = new System.Drawing.Point(380, 440),
-                Size = new System.Drawing.Size(100, 30)
+                Location = new System.Drawing.Point(545, 440),
+                Size = new System.Drawing.Size(100, 50)
             };
             refreshButton.Click += RefreshButton_Click;
 
@@ -74,21 +83,23 @@ namespace HotelManagement.Forms
             this.Controls.Add(updateButton);
             this.Controls.Add(deleteButton);
             this.Controls.Add(refreshButton);
+            this.Controls.Add(phonesButton);
         }
 
         private void LoadGuestData()
         {
             try
             {
-                using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     if (connection != null)
                     {
                         string query = "SELECT * FROM Guest";
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection);
+                        SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
                         DataTable dataTable = new DataTable();
                         adapter.Fill(dataTable);
                         guestGridView.DataSource = dataTable;
+                        guestGridView.Columns["Email"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                     }
                 }
             }
@@ -138,14 +149,25 @@ namespace HotelManagement.Forms
                 {
                     try
                     {
-                        using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                        using (SqlConnection connection = DatabaseConnection.GetConnection())
                         {
                             if (connection != null)
                             {
+                                /*string delete1 = @"Delete from Guest_Phone_nums
+                                                    where Guest_ID = @Guest_ID
+                                                    ";
+                                SqlCommand deletecmd = new SqlCommand(delete1,connection);
+                                deletecmd.Parameters.AddWithValue("@Guest_ID", guestId);
+                                deletecmd.ExecuteNonQuery();
                                 string query = "DELETE FROM Guest WHERE Guest_ID = @Guest_ID";
-                                MySqlCommand command = new MySqlCommand(query, connection);
+                                SqlCommand command = new SqlCommand(query, connection);
                                 command.Parameters.AddWithValue("@Guest_ID", guestId);
-                                command.ExecuteNonQuery();
+                                command.ExecuteNonQuery();*/
+                                string query = @"DeleteGuestAndPhones";
+                                SqlCommand cmd = new SqlCommand(query, connection);
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.AddWithValue ("@Guest_ID" , guestId);
+                                cmd.ExecuteNonQuery();
                                 LoadGuestData();
                             }
                         }
@@ -165,6 +187,17 @@ namespace HotelManagement.Forms
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             LoadGuestData();
+        }
+
+        private void PhonesButton_Click(object sender, EventArgs e)
+        {
+            if (guestGridView.SelectedRows.Count == 1)
+            {
+                DataGridViewRow selectedRow = guestGridView.SelectedRows[0];
+                int guestId = Convert.ToInt32(selectedRow.Cells["Guest_ID"].Value);
+                GuestPhonesForm phones = new GuestPhonesForm(guestId);
+                phones.ShowDialog();
+            }
         }
     }
 } 

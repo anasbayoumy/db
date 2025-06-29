@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using HotelManagement.Data;
 
 namespace HotelManagement.Forms
@@ -9,6 +9,7 @@ namespace HotelManagement.Forms
     {
         private readonly int guestId;
         private TextBox nameTextBox;
+        private TextBox emailTextBox;
         private TextBox nationalityTextBox;
         private ComboBox genderComboBox;
         private DateTimePicker dateOfBirthPicker;
@@ -53,10 +54,13 @@ namespace HotelManagement.Forms
             Label passportLabel = new Label { Text = "Passport Number:", Location = new System.Drawing.Point(20, 220) };
             passportTextBox = new TextBox { Location = new System.Drawing.Point(120, 220), Size = new System.Drawing.Size(240, 20) };
 
+            Label emailLabel = new Label { Text = "Email:", Location = new System.Drawing.Point(20, 260) };
+            emailTextBox = new TextBox { Location = new System.Drawing.Point(120, 260), Size = new System.Drawing.Size(240, 20) };
+
             saveButton = new Button
             {
                 Text = "Save",
-                Location = new System.Drawing.Point(120, 280),
+                Location = new System.Drawing.Point(120, 320),
                 Size = new System.Drawing.Size(100, 30)
             };
             saveButton.Click += SaveButton_Click;
@@ -64,7 +68,7 @@ namespace HotelManagement.Forms
             cancelButton = new Button
             {
                 Text = "Cancel",
-                Location = new System.Drawing.Point(240, 280),
+                Location = new System.Drawing.Point(240, 320),
                 Size = new System.Drawing.Size(100, 30)
             };
             cancelButton.Click += (s, e) => this.DialogResult = DialogResult.Cancel;
@@ -77,6 +81,7 @@ namespace HotelManagement.Forms
                 dobLabel, dateOfBirthPicker,
                 ageLabel, ageTextBox,
                 passportLabel, passportTextBox,
+                emailLabel, emailTextBox,
                 saveButton, cancelButton
             });
         }
@@ -85,15 +90,15 @@ namespace HotelManagement.Forms
         {
             try
             {
-                using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     if (connection != null)
                     {
                         string query = "SELECT * FROM Guest WHERE Guest_ID = @Guest_ID";
-                        MySqlCommand command = new MySqlCommand(query, connection);
+                        SqlCommand command = new SqlCommand(query, connection);
                         command.Parameters.AddWithValue("@Guest_ID", guestId);
 
-                        using (MySqlDataReader reader = command.ExecuteReader())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
@@ -103,6 +108,7 @@ namespace HotelManagement.Forms
                                 dateOfBirthPicker.Value = Convert.ToDateTime(reader["Date_of_Birth"]);
                                 ageTextBox.Text = reader["Age"].ToString();
                                 passportTextBox.Text = reader["Passport_Number"].ToString();
+                                emailTextBox.Text = reader["Email"].ToString();
                             }
                         }
                     }
@@ -120,7 +126,7 @@ namespace HotelManagement.Forms
             {
                 try
                 {
-                    using (MySqlConnection connection = DatabaseConnection.GetConnection())
+                    using (SqlConnection connection = DatabaseConnection.GetConnection())
                     {
                         if (connection != null)
                         {
@@ -130,10 +136,11 @@ namespace HotelManagement.Forms
                                                Gender = @Gender,
                                                Date_of_Birth = @Date_of_Birth,
                                                Age = @Age,
-                                               Passport_Number = @Passport_Number
+                                               Passport_Number = @Passport_Number,
+                                               Email = @Email 
                                            WHERE Guest_ID = @Guest_ID";
 
-                            MySqlCommand command = new MySqlCommand(query, connection);
+                            SqlCommand command = new SqlCommand(query, connection);
                             command.Parameters.AddWithValue("@Guest_ID", guestId);
                             command.Parameters.AddWithValue("@Name", nameTextBox.Text);
                             command.Parameters.AddWithValue("@Nationality", nationalityTextBox.Text);
@@ -141,6 +148,7 @@ namespace HotelManagement.Forms
                             command.Parameters.AddWithValue("@Date_of_Birth", dateOfBirthPicker.Value);
                             command.Parameters.AddWithValue("@Age", Convert.ToInt32(ageTextBox.Text));
                             command.Parameters.AddWithValue("@Passport_Number", passportTextBox.Text);
+                            command.Parameters.AddWithValue("@Email", emailTextBox.Text);
 
                             command.ExecuteNonQuery();
                             this.DialogResult = DialogResult.OK;
@@ -177,6 +185,12 @@ namespace HotelManagement.Forms
             if (string.IsNullOrWhiteSpace(passportTextBox.Text))
             {
                 MessageBox.Show("Please enter a passport number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(emailTextBox.Text))
+            {
+                MessageBox.Show("Please enter an email.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
